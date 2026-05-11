@@ -93,19 +93,22 @@ section{padding:72px 20px}
 
 /* GALLERY */
 .gallery{position:relative;width:100%;aspect-ratio:1/1;background:var(--primary-light);overflow:hidden}
-.gallery img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
+.gallery img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
 .gallery img.active{opacity:1}
 .g-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--primary-light),#cce6ef);color:var(--primary)}
 .g-ph i{font-size:48px;margin-bottom:10px;opacity:.6}
 .g-ph span{font-size:13px;font-weight:700;opacity:.75}
-.g-badge{position:absolute;top:12px;right:12px;z-index:2;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.18)}
-.g-ship{position:absolute;top:12px;left:12px;z-index:2;background:var(--whatsapp);color:#fff;padding:4px 9px;border-radius:20px;font-size:10px;font-weight:800}
-.thumbs{display:flex;gap:6px;padding:8px 10px;background:#eef6fa;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
-.thumbs::-webkit-scrollbar{display:none}
-.thumb{width:52px;height:52px;border-radius:8px;overflow:hidden;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .2s}
-.thumb.active{border-color:var(--primary);transform:scale(1.08)}
-.thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.thumb-ph{width:100%;height:100%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--primary);opacity:.6}
+.g-badge{position:absolute;top:12px;right:12px;z-index:4;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.g-ship{position:absolute;top:12px;left:12px;z-index:4;background:var(--whatsapp);color:#fff;padding:4px 9px;border-radius:20px;font-size:10px;font-weight:800}
+/* Arrow nav */
+.g-arr{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.88);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--primary);box-shadow:0 2px 10px rgba(0,0,0,.18);transition:.2s;line-height:1}
+.g-arr:hover{background:var(--primary);color:#fff}
+.g-arr-r{right:10px}
+.g-arr-l{left:10px}
+/* Dots */
+.g-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:4}
+.g-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);border:none;cursor:pointer;padding:0;transition:.2s}
+.g-dot.on{background:#fff;width:18px;border-radius:4px}
 
 /* CARD BODY */
 .card-body{padding:18px}
@@ -311,12 +314,15 @@ html[dir="ltr"] .nav-logo{margin-right:0}
     <!-- PRODUCT 1 – 180 DH -->
     <div class="prod-card" id="p1">
       <div class="gallery" id="g1">
-        <img id="p1img" src="images/product1/natural_1.svg" class="active" alt="" onerror="imgErr(this,'ph1')">
-        <div class="g-ph" id="ph1" style="display:none"><i class="fa-solid fa-layer-group"></i><span data-i18n="p1.name">رف جداري صغير</span></div>
+        <img src="images/product1/white.jpeg"  class="active" alt="">
+        <img src="images/product1/Gray.jpeg"   alt="">
+        <img src="images/product1/p1_2.jpg"    alt="">
+        <button class="g-arr g-arr-r" onclick="slideG('g1',-1)">&#8249;</button>
+        <button class="g-arr g-arr-l" onclick="slideG('g1', 1)">&#8250;</button>
+        <div class="g-dots" id="dots-g1"></div>
         <div class="g-badge" data-i18n="badge.new">🆕 جديد</div>
         <div class="g-ship" data-i18n="badge.ship">🚚 فابور</div>
       </div>
-      <div class="thumbs" id="th1"></div>
       <div class="card-body">
         <div class="card-name" data-i18n="p1.name">رف جداري عصري صغير — خشب MDF</div>
         <div class="card-sub" data-i18n="p1.sub">مثالي للمطبخ، الصالون أو أي مساحة داخل المنزل</div>
@@ -324,32 +330,7 @@ html[dir="ltr"] .nav-logo{margin-right:0}
           <div class="price">180 <small data-i18n="currency">درهم</small></div>
           <div class="stars-wrap"><span class="stars">★★★★★</span><span class="stars-val">5.0</span></div>
         </div>
-        <div class="color-row">
-          <div class="color-lbl"><span data-i18n="color.label">اللون:</span> <b id="cl1"></b></div>
-          <div class="color-dots" id="cd1"></div>
-        </div>
-        <button class="desc-btn" onclick="toggleDesc('dp1',this)">
-          <span data-i18n="desc.open">📋 عرض الوصف الكامل</span><span class="arr">⌄</span>
-        </button>
-        <div class="desc-panel" id="dp1">
-          <p data-i18n="p1.desc1">رف جداري عصري بتصميم مودرن وأنيق، مثالي لتنظيم وتزيين المطبخ، الصالون أو أي مساحة داخل المنزل. مصنوع من خشب MDF عالي الجودة بتشطيب خشبي طبيعي يمنح لمسة دافئة وفخمة تناسب مختلف أنماط الديكور العصري.</p>
-          <p data-i18n="p1.desc2">التصميم العملي يوفر مساحات متعددة لترتيب التوابل، الأواني الصغيرة، الكتب أو قطع الديكور بشكل منظم وأنيق، مع استغلال مثالي للمساحة على الحائط.</p>
-          <div class="feat-list">
-            <p>✅ <span data-i18n="p1.f1">مصنوع من خشب MDF متين وعالي الجودة</span></p>
-            <p>✅ <span data-i18n="p1.f2">تصميم عصري مناسب لجميع الديكورات</span></p>
-            <p>✅ <span data-i18n="p1.f3">سهل التركيب والتنظيف</span></p>
-            <p>✅ <span data-i18n="p1.f4">عملي لتنظيم المساحات الصغيرة</span></p>
-            <p>✅ <span data-i18n="p1.f5">تشطيب خشبي أنيق ولمسة مودرن</span></p>
-            <p>🚚 <span data-i18n="feat.ship">التوصيل فابور لجميع الطلبات</span></p>
-          </div>
-          <div class="faq-ttl" data-i18n="faq.title">الأسئلة الشائعة</div>
-          <div class="faq-item"><div class="faq-q" data-i18n="faq.q1">❓ شنو نوع الخشب المستعمل؟</div><div class="faq-a" data-i18n="faq.a1">المنتج مصنوع من خشب MDF عالي الجودة بتشطيب أنيق ومتين.</div></div>
-          <div class="faq-item"><div class="faq-q" data-i18n="faq.q2">❓ واش الرف مناسب للمطبخ؟</div><div class="faq-a" data-i18n="faq.a2">نعم، مثالي لتنظيم التوابل، الأواني الصغيرة وقطع الديكور داخل المطبخ.</div></div>
-          <div class="faq-item"><div class="faq-q" data-i18n="faq.q3">❓ واش يمكن استعمالو فغرف أخرى؟</div><div class="faq-a" data-i18n="faq.a3">أكيد، يمكن استعماله في الصالون، غرفة النوم، المكتب أو حتى المدخل.</div></div>
-          <div class="faq-item"><div class="faq-q" data-i18n="faq.q4">❓ واش التركيب ساهل؟</div><div class="faq-a" data-i18n="faq.a4">نعم، الرف سهل التركيب ويأتي بتصميم عملي مناسب للحائط.</div></div>
-          <div class="faq-item"><div class="faq-q" data-i18n="faq.q5">❓ واش اللون كيكون نفس الصورة؟</div><div class="faq-a" data-i18n="faq.a5">نعم، مع احتمال اختلاف بسيط بسبب الإضاءة أو إعدادات الشاشة.</div></div>
-        </div>
-        <a id="ob1" href="#" class="order-btn" target="_blank">
+        <a href="https://wa.me/212771263305?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A8%D8%BA%D9%8A%D8%AA%20%D9%86%D8%B7%D9%84%D8%A8%20%D8%A7%D9%84%D8%B1%D9%81%20%D8%A7%D9%84%D8%AC%D8%AF%D8%A7%D8%B1%D9%8A%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%20(180%20%D8%AF%D8%B1%D9%87%D9%85)" class="order-btn" target="_blank">
           <i class="fa-brands fa-whatsapp" style="font-size:19px"></i>
           <span data-i18n="btn.order">اطلب الآن عبر واتساب</span>
         </a>
@@ -363,12 +344,16 @@ html[dir="ltr"] .nav-logo{margin-right:0}
     <!-- PRODUCT 2 – 219 DH -->
     <div class="prod-card" id="p2">
       <div class="gallery" id="g2">
-        <img id="p2img" src="images/product2/blue_1.svg" class="active" alt="" onerror="imgErr(this,'ph2')">
-        <div class="g-ph" id="ph2" style="display:none"><i class="fa-solid fa-layer-group"></i><span data-i18n="p2.name">رفوف جدارية كبيرة</span></div>
+        <img src="images/product2/p2_main.jpg"  class="active" alt="">
+        <img src="images/product2/p2_oak.jpg"   alt="">
+        <img src="images/product2/p2_gray.jpg"  alt="">
+        <img src="images/product2/p2_white.jpg" alt="">
+        <button class="g-arr g-arr-r" onclick="slideG('g2',-1)">&#8249;</button>
+        <button class="g-arr g-arr-l" onclick="slideG('g2', 1)">&#8250;</button>
+        <div class="g-dots" id="dots-g2"></div>
         <div class="g-badge" data-i18n="badge.best">⭐ الأكثر مبيعاً</div>
         <div class="g-ship" data-i18n="badge.ship">🚚 فابور</div>
       </div>
-      <div class="thumbs" id="th2"></div>
       <div class="card-body">
         <div class="card-name" data-i18n="p2.name">رفوف جدارية عصرية كبيرة — خشب MDF</div>
         <div class="card-sub" data-i18n="p2.sub">مثالية للحمام، الصالون، غرفة النوم أو المكتب</div>
@@ -376,31 +361,7 @@ html[dir="ltr"] .nav-logo{margin-right:0}
           <div class="price">219 <small data-i18n="currency">درهم</small></div>
           <div class="stars-wrap"><span class="stars">★★★★★</span><span class="stars-val">5.0</span></div>
         </div>
-        <div class="color-row">
-          <div class="color-lbl"><span data-i18n="color.label">اللون:</span> <b id="cl2"></b></div>
-          <div class="color-dots" id="cd2"></div>
-        </div>
-        <button class="desc-btn" onclick="toggleDesc('dp2',this)">
-          <span data-i18n="desc.open">📋 عرض الوصف الكامل</span><span class="arr">⌄</span>
-        </button>
-        <div class="desc-panel" id="dp2">
-          <p data-i18n="p2.desc1">رفوف حائط عصرية بتصميم أنيق ولون أزرق ملكي يضيف لمسة فخامة وتنظيم لأي حمام أو غرفة. مصنوعة من خشب MDF عالي الجودة المعروف بالمتانة والسطح الناعم والتشطيب العصري.</p>
-          <p data-i18n="p2.desc2">مثالية للحمامات العصرية، الصالونات، غرف النوم وحتى المكاتب، حيث تجمع بين الجمالية والوظيفة في نفس الوقت.</p>
-          <div class="feat-list">
-            <p>✅ <span data-i18n="p2.f1">تصميم مودرن وأنيق</span></p>
-            <p>✅ <span data-i18n="p2.f2">خشب MDF قوي وعالي الجودة</span></p>
-            <p>✅ <span data-i18n="p1.f3">سهل التركيب والتنظيف</span></p>
-            <p>✅ <span data-i18n="p2.f4">مناسب لمختلف الديكورات</span></p>
-            <p>✅ <span data-i18n="p2.f5">مساحات تخزين عملية ومنظمة</span></p>
-            <p>🚚 <span data-i18n="feat.ship">التوصيل فابور لجميع الطلبات</span></p>
-          </div>
-          <div class="faq-ttl" data-i18n="faq.title">الأسئلة الشائعة</div>
-          <div class="faq-item"><div class="faq-q" data-i18n="faq.q1">❓ شنو نوع الخشب المستعمل؟</div><div class="faq-a" data-i18n="faq.a1.2">المنتج مصنوع من خشب MDF عالي الجودة بتشطيب عصري ومتين.</div></div>
-          <div class="faq-item"><div class="faq-q" data-i18n="p2.faq.q1">❓ واش الرفوف مقاومة للرطوبة؟</div><div class="faq-a" data-i18n="p2.faq.a1">نعم، مناسبة للاستعمال اليومي داخل الحمام مع الحفاظ عليها من تعرض مباشر للماء.</div></div>
-          <div class="faq-item"><div class="faq-q" data-i18n="faq.q4">❓ واش التركيب ساهل؟</div><div class="faq-a" data-i18n="p2.faq.a2">نعم، الرفوف سهلة التركيب وتجي بتصميم عملي مناسب للحائط.</div></div>
-          <div class="faq-item"><div class="faq-q" data-i18n="faq.q5">❓ واش اللون كيبقى نفس اللي فالصورة؟</div><div class="faq-a" data-i18n="faq.a5">نعم، مع احتمال اختلاف بسيط بسبب الإضاءة أو إعدادات الشاشة.</div></div>
-        </div>
-        <a id="ob2" href="#" class="order-btn" target="_blank">
+        <a href="https://wa.me/212771263305?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A8%D8%BA%D9%8A%D8%AA%20%D9%86%D8%B7%D9%84%D8%A8%20%D8%A7%D9%84%D8%B1%D9%81%D9%88%D9%81%20%D8%A7%D9%84%D8%AC%D8%AF%D8%A7%D8%B1%D9%8A%D8%A9%20%D8%A7%D9%84%D9%83%D8%A8%D9%8A%D8%B1%D8%A9%20(219%20%D8%AF%D8%B1%D9%87%D9%85)" class="order-btn" target="_blank">
           <i class="fa-brands fa-whatsapp" style="font-size:19px"></i>
           <span data-i18n="btn.order">اطلب الآن عبر واتساب</span>
         </a>
@@ -618,140 +579,63 @@ fr:{
 }
 };
 
-/* ═══ PRODUCT DATA ═══ */
-const DATA={
-  p1:{name:{ar:'الرف الجداري الصغير',fr:'Étagère Petite'},price:180,
-    colors:[
-      {ar:'الطبيعي',fr:'Naturel',h:'#C4956A',imgs:['images/product1/natural_1.svg','images/product1/natural_1.svg']},
-      {ar:'الأبيض المكسور',fr:'Blanc Cassé',h:'#F5EDD8',imgs:['images/product1/أبيض_مكسور_(Off-White___Cream)_202605111604.jpeg','images/product1/أبيض_مكسور_(Off-White___Cream)_202605111607.jpeg']},
-      {ar:'الرمادي الفاتح',fr:'Gris Clair',h:'#B8B8B8',imgs:['images/product1/رمادي_فاتح_(Light_Gray)_2K_202605111609.jpeg','images/product1/رمادي_فاتح_(Light_Gray)_2K_202605111609.jpeg']},
-      {ar:'الأسود',fr:'Noir',h:'#2C2C2C',imgs:['images/product1/black_1.svg','images/product1/black_1.svg']},
-    ]},
-  p2:{name:{ar:'الرفوف الجدارية الكبيرة',fr:'Grandes Étagères'},price:219,
-    colors:[
-      {ar:'اللون الأصلي',fr:'Original',h:'#8B5E3C',imgs:['images/product2/اريد_نفس_الصورة_تعدل_غير_202605111553.jpeg','images/product2/اريد_نفس_الصورة_تعدل_غير_202605111553.jpeg']},
-      {ar:'الخشبي الفاتح',fr:'Chêne Clair',h:'#C4956A',imgs:['images/product2/خشبي_فاتح_(Oak___Beige_202605111558.jpeg','images/product2/خشبي_فاتح_(Oak___Beige_202605111558.jpeg']},
-      {ar:'الرمادي الفاتح',fr:'Gris Clair',h:'#B8B8B8',imgs:['images/product2/رمادي_فاتح_(Light_Gray)_2K_202605111559.jpeg','images/product2/رمادي_فاتح_(Light_Gray)_2K_202605111559.jpeg']},
-      {ar:'الأبيض',fr:'Blanc',h:'#F0EDE8',imgs:['images/product2/غير_لون_المنتج_الى_أبيض_202605111557.jpeg','images/product2/غير_لون_المنتج_الى_أبيض_202605111557.jpeg']},
-    ]}
-};
-
 /* ═══ LANG ═══ */
-let currentLang=localStorage.getItem('lang')||'ar';
+let currentLang = localStorage.getItem('lang') || 'ar';
 
-function applyLang(lang){
-  currentLang=lang;
-  localStorage.setItem('lang',lang);
-  const html=document.documentElement;
-  html.lang=lang;html.dir=lang==='ar'?'rtl':'ltr';
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const k=el.dataset.i18n;
-    if(T[lang][k]!==undefined) el.textContent=T[lang][k];
+function applyLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  const html = document.documentElement;
+  html.lang = lang;
+  html.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (T[lang] && T[lang][k] !== undefined) el.textContent = T[lang][k];
   });
-  const btn=document.getElementById('langBtn');
-  if(btn) btn.textContent=lang==='ar'?'🇫🇷 FR':'🇲🇦 AR';
-  const ml=document.getElementById('mobileLangLabel');
-  if(ml) ml.textContent=lang==='ar'?'🇫🇷 Français':'🇲🇦 العربية';
-  // refresh color labels
-  ['p1','p2'].forEach(pid=>{ const st=state[pid]; if(st) updateColorLabel(pid,st.ci); });
-  // refresh WA links
-  updateWaLink('p1',state.p1.ci);
-  updateWaLink('p2',state.p2.ci);
+  const btn = document.getElementById('langBtn');
+  if (btn) btn.textContent = lang === 'ar' ? '🇫🇷 FR' : '🇲🇦 AR';
+  const ml = document.getElementById('mobileLangLabel');
+  if (ml) ml.textContent = lang === 'ar' ? '🇫🇷 Français' : '🇲🇦 العربية';
 }
-function toggleLang(){ applyLang(currentLang==='ar'?'fr':'ar'); }
+function toggleLang() { applyLang(currentLang === 'ar' ? 'fr' : 'ar'); }
 
-/* ═══ STATE ═══ */
-const state={p1:{ci:0},p2:{ci:0}};
-
-function init(){
-  ['p1','p2'].forEach(pid=>{ buildDots(pid); buildThumbs(pid,0); updateColorLabel(pid,0); updateWaLink(pid,0); });
-  applyLang(currentLang);
+/* ═══ GALLERY SLIDER ═══ */
+function slideG(gId, dir) {
+  const g = document.getElementById(gId);
+  const imgs = g.querySelectorAll('img');
+  let cur = [...imgs].findIndex(i => i.classList.contains('active'));
+  imgs[cur].classList.remove('active');
+  cur = (cur + dir + imgs.length) % imgs.length;
+  imgs[cur].classList.add('active');
+  g.querySelectorAll('.g-dot').forEach((d, i) => d.classList.toggle('on', i === cur));
 }
 
-function buildDots(pid){
-  const n=pid[1];
-  const wrap=document.getElementById('cd'+n);
-  DATA[pid].colors.forEach((c,i)=>{
-    const b=document.createElement('button');
-    b.type='button';b.className='cdot'+(i===0?' active':'');
-    b.style.background=c.h;
-    if(c.h==='#F0EDE8') b.style.outline='1.5px solid #ccc';
-    b.onclick=()=>selectColor(pid,i);
-    wrap.appendChild(b);
+function buildGallery(gId) {
+  const g    = document.getElementById(gId);
+  const imgs = g.querySelectorAll('img');
+  const wrap = document.getElementById('dots-' + gId);
+  imgs.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'g-dot' + (i === 0 ? ' on' : '');
+    d.onclick = () => {
+      imgs.forEach((im, j) => im.classList.toggle('active', j === i));
+      g.querySelectorAll('.g-dot').forEach((dt, j) => dt.classList.toggle('on', j === i));
+    };
+    wrap.appendChild(d);
   });
+  /* touch swipe */
+  let tx = 0;
+  g.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  g.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) slideG(gId, dx > 0 ? -1 : 1);
+  }, {passive:true});
 }
 
-function buildThumbs(pid,ci){
-  const n=pid[1];
-  const wrap=document.getElementById('th'+n);
-  wrap.innerHTML='';
-  DATA[pid].colors[ci].imgs.forEach((src,i)=>{
-    const d=document.createElement('div');
-    d.className='thumb'+(i===0?' active':'');
-    d.onclick=()=>selectThumb(pid,i,ci);
-    const img=document.createElement('img');
-    img.src=src;img.alt='';
-    img.onerror=function(){this.parentNode.innerHTML='<div class="thumb-ph"><i class="fa-solid fa-image"></i></div>'};
-    d.appendChild(img);wrap.appendChild(d);
-  });
-}
+buildGallery('g1');
+buildGallery('g2');
 
-function selectColor(pid,ci){
-  state[pid].ci=ci;
-  const n=pid[1];
-  document.querySelectorAll('#cd'+n+' .cdot').forEach((d,i)=>d.classList.toggle('active',i===ci));
-  updateColorLabel(pid,ci);
-  buildThumbs(pid,ci);
-  setMainImg(pid,DATA[pid].colors[ci].imgs[0]);
-  updateWaLink(pid,ci);
-}
-
-function updateColorLabel(pid,ci){
-  const n=pid[1];
-  document.getElementById('cl'+n).textContent=DATA[pid].colors[ci][currentLang]||DATA[pid].colors[ci].ar;
-}
-
-function selectThumb(pid,ii,ci){
-  const n=pid[1];
-  document.querySelectorAll('#th'+n+' .thumb').forEach((t,i)=>t.classList.toggle('active',i===ii));
-  setMainImg(pid,DATA[pid].colors[ci].imgs[ii]);
-}
-
-function setMainImg(pid,src){
-  const n=pid[1];
-  const img=document.getElementById('p'+n+'img');
-  const ph=document.getElementById('ph'+n);
-  img.src=src;img.style.display='';img.classList.add('active');
-  ph.style.display='none';
-}
-
-function imgErr(img,phId){
-  img.style.display='none';
-  const ph=document.getElementById(phId);
-  if(ph) ph.style.display='flex';
-}
-
-function updateWaLink(pid,ci){
-  const n=pid[1];
-  const d=DATA[pid];const c=d.colors[ci];
-  const name=d.name[currentLang]||d.name.ar;
-  const col=c[currentLang]||c.ar;
-  const msg=currentLang==='ar'
-    ?`السلام عليكم، بغيت نطلب ${name} بلون ${col} (${d.price} درهم)`
-    :`Bonjour, je veux commander ${name} en couleur ${col} (${d.price} Dh)`;
-  document.getElementById('ob'+n).href='https://wa.me/212771263305?text='+encodeURIComponent(msg);
-}
-
-/* ═══ ACCORDION ═══ */
-function toggleDesc(id,btn){
-  const panel=document.getElementById(id);
-  const open=panel.classList.contains('open');
-  panel.classList.toggle('open',!open);
-  btn.classList.toggle('open',!open);
-  const sp=btn.querySelector('[data-i18n^="desc"]');
-  if(sp) sp.dataset.i18n=open?'desc.open':'desc.close';
-  if(sp) sp.textContent=T[currentLang][open?'desc.open':'desc.close'];
-}
+applyLang(currentLang);
 
 /* ═══ NAV ═══ */
 function toggleMenu(){
@@ -779,8 +663,6 @@ function adjustNav(){
 }
 window.addEventListener('resize',adjustNav);
 adjustNav();
-
-init();
 </script>
 </body>
 </html>

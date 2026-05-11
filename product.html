@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>تفاصيل المنتج</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --primary:#1a6b8a;--primary-dark:#124f68;--primary-light:#e8f4f8;
+  --accent:#00b4d8;--accent2:#d4af37;
+  --text:#1e2a38;--text-light:#5a6a7a;
+  --white:#fff;--bg:#f7fbfd;--card-bg:#fff;--border:#dde8ee;
+  --whatsapp:#25d366;--whatsapp-dark:#128c7e;
+  --shadow:0 4px 24px rgba(26,107,138,.10);--shadow-lg:0 8px 48px rgba(26,107,138,.18);
+  --radius:16px;--radius-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);box-shadow:var(--shadow);padding:0 16px}
+.nav-inner{max-width:1100px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.back-btn{display:flex;align-items:center;gap:7px;text-decoration:none;color:var(--primary);font-size:14px;font-weight:700;padding:8px 14px;border-radius:22px;background:var(--primary-light);transition:all .2s;flex-shrink:0}
+.back-btn:hover{background:var(--primary);color:#fff}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex:1;justify-content:center}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
+.logo-text .brand{font-size:14px;font-weight:900;color:var(--primary-dark)}
+.lang-btn{background:var(--primary-light);border:1.5px solid var(--border);color:var(--primary);padding:7px 12px;border-radius:20px;font-family:'Cairo',sans-serif;font-size:12.5px;font-weight:800;cursor:pointer;flex-shrink:0;transition:.2s}
+.lang-btn:hover{background:var(--primary);color:#fff}
+
+/* PAGE */
+.page{padding-top:60px;padding-bottom:120px}
+
+/* BREADCRUMB */
+.breadcrumb{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-light)}
+.breadcrumb a{color:var(--primary);text-decoration:none;font-weight:600}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb span{color:var(--text-light)}
+
+/* PRODUCT LAYOUT */
+.product-layout{max-width:1000px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+
+/* GALLERY SIDE */
+.gallery-side{}
+.main-img-wrap{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--primary-light);aspect-ratio:1/1;box-shadow:var(--shadow-lg)}
+.main-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
+.g-ph-full{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--primary-light),#cce6ef);color:var(--primary)}
+.g-ph-full i{font-size:64px;margin-bottom:12px;opacity:.6}
+.g-ph-full span{font-size:15px;font-weight:700;opacity:.75}
+
+/* Gallery nav arrows */
+.g-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--primary);box-shadow:0 2px 12px rgba(0,0,0,.15);transition:all .2s}
+.g-arrow:hover{background:var(--primary);color:#fff}
+.g-arrow-prev{right:12px}
+.g-arrow-next{left:12px}
+
+/* Thumbnails */
+.thumbs-row{display:flex;gap:8px;margin-top:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.thumbs-row::-webkit-scrollbar{display:none}
+.thumb{width:68px;height:68px;border-radius:10px;overflow:hidden;flex-shrink:0;cursor:pointer;border:2.5px solid transparent;transition:all .2s;box-shadow:var(--shadow)}
+.thumb.active{border-color:var(--primary);transform:scale(1.06)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb-ph{width:100%;height:100%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--primary);opacity:.6}
+
+/* Badge strip */
+.badges{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.bdg-blue{background:var(--primary-light);color:var(--primary)}
+.bdg-green{background:#e8f8ef;color:#166534}
+.bdg-gold{background:#fff8e1;color:#8a6800}
+
+/* INFO SIDE */
+.info-side{}
+.prod-title{font-size:22px;font-weight:900;color:var(--text);line-height:1.3;margin-bottom:8px}
+.prod-sub{font-size:14px;color:var(--text-light);margin-bottom:18px;line-height:1.5}
+
+.rating-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.stars-big{color:#f0b429;font-size:18px}
+.rating-count{font-size:13px;color:var(--text-light);font-weight:600}
+
+.price-box{background:linear-gradient(135deg,var(--primary-light),#fff);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:18px}
+.price-main{font-size:38px;font-weight:900;color:var(--primary);line-height:1}
+.price-main small{font-size:16px;font-weight:600;color:var(--text-light)}
+.price-note{font-size:12px;color:var(--whatsapp);font-weight:700;margin-top:6px;display:flex;align-items:center;gap:5px}
+
+/* Color picker */
+.color-sec{margin-bottom:18px}
+.color-heading{font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px}
+.color-heading b{color:var(--primary);font-size:15px}
+.color-dots{display:flex;gap:10px;flex-wrap:wrap}
+.cdot{width:38px;height:38px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.cdot.active{border-color:var(--primary);box-shadow:0 0 0 2px #fff,0 0 0 4.5px var(--primary);transform:scale(1.12)}
+.cdot:hover{transform:scale(1.15)}
+
+/* Description */
+.desc-sec{margin-bottom:20px}
+.desc-sec h3{font-size:15px;font-weight:800;color:var(--primary-dark);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.desc-text{font-size:13.5px;color:var(--text);line-height:1.85;margin-bottom:10px}
+.feat-list{background:#eef9f1;border-radius:10px;padding:13px 15px;margin:12px 0;border-right:3px solid #22c55e}
+.feat-list p{margin-bottom:6px;font-size:13px}
+.feat-list p:last-child{margin-bottom:0}
+
+/* FAQ */
+.faq-sec{margin-bottom:20px}
+.faq-sec h3{font-size:15px;font-weight:800;color:var(--primary-dark);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.faq-item{background:var(--primary-light);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.faq-q{font-size:13px;font-weight:800;color:var(--primary);margin-bottom:6px}
+.faq-a{font-size:12.5px;color:var(--text-light);line-height:1.6}
+
+/* CTA Buttons */
+.cta-group{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.order-btn-lg{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:linear-gradient(135deg,var(--whatsapp),var(--whatsapp-dark));color:#fff;text-decoration:none;border:none;border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:16px;font-weight:900;box-shadow:0 4px 18px rgba(37,211,102,.38);transition:all .25s;cursor:pointer}
+.order-btn-lg:hover{transform:translateY(-3px);box-shadow:0 7px 24px rgba(37,211,102,.5)}
+.share-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:transparent;border:1.5px solid var(--border);color:var(--text-light);border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.share-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light)}
+
+/* Delivery info */
+.delivery-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.del-item{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 8px;text-align:center}
+.del-icon{font-size:18px;margin-bottom:4px}
+.del-txt{font-size:11px;font-weight:700;color:var(--text)}
+
+/* STICKY ORDER (mobile) */
+.sticky-order{position:fixed;bottom:0;left:0;right:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:12px 16px;box-shadow:0 -4px 20px rgba(26,107,138,.12);display:none}
+.sticky-order a{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:14px;background:linear-gradient(135deg,var(--whatsapp),var(--whatsapp-dark));color:#fff;text-decoration:none;border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:15px;font-weight:900;box-shadow:0 4px 16px rgba(37,211,102,.35)}
+
+/* FLOAT WA */
+.wa-float{position:fixed;bottom:80px;left:18px;z-index:999}
+.wa-float a{display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:linear-gradient(135deg,var(--whatsapp),var(--whatsapp-dark));color:#fff;border-radius:50%;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.48);animation:waPulse 2.2s infinite;transition:transform .25s}
+.wa-float a:hover{transform:scale(1.1)}
+.wa-float a svg{width:24px;height:24px;fill:#fff}
+.wa-tooltip{position:absolute;bottom:58px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:5px 10px;border-radius:7px;font-size:11.5px;font-weight:600;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .3s}
+.wa-float:hover .wa-tooltip{opacity:1}
+@keyframes waPulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.48)}50%{box-shadow:0 4px 32px rgba(37,211,102,.75)}}
+
+/* LTR */
+html[dir="ltr"] .feat-list{border-right:none;border-left:3px solid #22c55e}
+html[dir="ltr"] .g-arrow-prev{right:auto;left:12px}
+html[dir="ltr"] .g-arrow-next{left:auto;right:12px}
+
+/* RESPONSIVE */
+@media(max-width:720px){
+  .product-layout{grid-template-columns:1fr}
+  .sticky-order{display:block}
+  .wa-float{bottom:85px}
+}
+@media(max-width:420px){
+  .prod-title{font-size:18px}
+  .price-main{font-size:30px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="back-btn" id="backBtn">
+      <i class="fa-solid fa-arrow-right"></i>
+      <span data-i18n="back">العودة للمتجر</span>
+    </a>
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon"><i class="fa-solid fa-layer-group"></i></div>
+      <div class="logo-text"><div class="brand" data-i18n="store.name">متجر الرفوف العصرية</div></div>
+    </a>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">🇫🇷 FR</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="breadcrumb">
+    <a href="index.html" data-i18n="store.name">متجر الرفوف العصرية</a>
+    <i class="fa-solid fa-chevron-left" style="font-size:10px"></i>
+    <span id="breadProd">المنتج</span>
+  </div>
+
+  <div class="product-layout">
+
+    <!-- GALLERY -->
+    <div class="gallery-side">
+      <div class="main-img-wrap" id="mainImgWrap">
+        <img id="mainImg" src="" alt="">
+        <div class="g-ph-full" id="gPh">
+          <i class="fa-solid fa-layer-group"></i>
+          <span id="gPhText">رف جداري</span>
+        </div>
+        <button class="g-arrow g-arrow-prev" onclick="slideImg(1)" title="السابق"><i class="fa-solid fa-chevron-right"></i></button>
+        <button class="g-arrow g-arrow-next" onclick="slideImg(-1)" title="التالي"><i class="fa-solid fa-chevron-left"></i></button>
+      </div>
+
+      <div class="thumbs-row" id="thumbsRow"></div>
+
+      <div class="badges">
+        <div class="bdg bdg-green"><i class="fa-solid fa-truck-fast"></i> <span data-i18n="badge.ship.full">توصيل مجاني لكل المغرب</span></div>
+        <div class="bdg bdg-gold"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="badge.quality">جودة مضمونة</span></div>
+        <div class="bdg bdg-blue"><i class="fa-solid fa-bolt"></i> <span data-i18n="badge.fast">24–72h</span></div>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="info-side">
+      <div class="prod-title" id="prodTitle"></div>
+      <div class="prod-sub" id="prodSub"></div>
+
+      <div class="rating-row">
+        <span class="stars-big">★★★★★</span>
+        <span class="rating-count" data-i18n="rating.count">(+500 زبون راضي)</span>
+      </div>
+
+      <div class="price-box">
+        <div class="price-main" id="prodPrice"></div>
+        <div class="price-note"><i class="fa-solid fa-truck-fast"></i> <span data-i18n="price.ship">التوصيل مجاني — فابور</span></div>
+      </div>
+
+      <div class="color-sec">
+        <div class="color-heading"><span data-i18n="color.label">اللون:</span> <b id="colorName"></b></div>
+        <div class="color-dots" id="colorDots"></div>
+      </div>
+
+      <div class="delivery-strip">
+        <div class="del-item"><div class="del-icon">🚚</div><div class="del-txt" data-i18n="del.free">توصيل مجاني</div></div>
+        <div class="del-item"><div class="del-icon">⚡</div><div class="del-txt" data-i18n="del.fast">24–72 ساعة</div></div>
+        <div class="del-item"><div class="del-icon">✅</div><div class="del-txt" data-i18n="del.quality">جودة عالية</div></div>
+      </div>
+
+      <div class="cta-group">
+        <a id="orderBtn" href="#" class="order-btn-lg" target="_blank">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <span data-i18n="btn.order">اطلب الآن عبر واتساب</span>
+        </a>
+        <button class="share-btn" onclick="shareProduct()">
+          <i class="fa-solid fa-share-nodes"></i>
+          <span data-i18n="btn.share">مشاركة المنتج</span>
+        </button>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="desc-sec">
+        <h3><i class="fa-solid fa-file-lines"></i> <span data-i18n="desc.title">وصف المنتج</span></h3>
+        <div id="descContent"></div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq-sec">
+        <h3><i class="fa-solid fa-circle-question"></i> <span data-i18n="faq.title">الأسئلة الشائعة</span></h3>
+        <div id="faqContent"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- STICKY (mobile) -->
+<div class="sticky-order">
+  <a id="stickyOrder" href="#" target="_blank">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span data-i18n="btn.order">اطلب الآن عبر واتساب</span>
+  </a>
+</div>
+
+<!-- FLOAT WA -->
+<div class="wa-float">
+  <div class="wa-tooltip" data-i18n="wa.tooltip">تواصل معنا</div>
+  <a href="https://wa.me/212771263305" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<script>
+/* ═══ TRANSLATIONS ═══ */
+const T={
+ar:{
+  'store.name':'متجر الرفوف العصرية',
+  'back':'العودة للمتجر','back.icon':'fa-arrow-right',
+  'badge.ship.full':'توصيل مجاني لكل المغرب','badge.quality':'جودة مضمونة','badge.fast':'24–72h',
+  'rating.count':'(+500 زبون راضي)',
+  'color.label':'اللون:','price.ship':'التوصيل مجاني — فابور',
+  'del.free':'توصيل مجاني','del.fast':'24–72 ساعة','del.quality':'جودة عالية',
+  'btn.order':'اطلب الآن عبر واتساب','btn.share':'مشاركة المنتج',
+  'desc.title':'وصف المنتج','faq.title':'الأسئلة الشائعة',
+  'badge.ship':'🚚 فابور',
+  'wa.tooltip':'تواصل معنا'
+},
+fr:{
+  'store.name':'Étagères Modernes',
+  'back':'Retour à la boutique','back.icon':'fa-arrow-left',
+  'badge.ship.full':'Livraison gratuite au Maroc','badge.quality':'Qualité garantie','badge.fast':'24–72h',
+  'rating.count':'(+500 clients satisfaits)',
+  'color.label':'Couleur :','price.ship':'Livraison GRATUITE',
+  'del.free':'Livraison gratuite','del.fast':'24–72 heures','del.quality':'Haute qualité',
+  'btn.order':'Commander via WhatsApp','btn.share':'Partager le produit',
+  'desc.title':'Description du produit','faq.title':'Questions Fréquentes',
+  'badge.ship':'🚚 Gratuit',
+  'wa.tooltip':'Nous contacter'
+}
+};
+
+/* ═══ PRODUCT DATA ═══ */
+const PRODUCTS={
+  1:{
+    name:{ar:'رف جداري عصري صغير — خشب MDF',fr:'Étagère Murale Moderne — Bois MDF (Petite)'},
+    sub:{ar:'مثالي للمطبخ، الصالون أو أي مساحة داخل المنزل',fr:'Idéale pour cuisine, salon ou tout espace intérieur'},
+    price:180,
+    colors:[
+      {ar:'الطبيعي',fr:'Naturel',h:'#C4956A',imgs:['images/product1/natural_1.svg','images/product1/natural_1.svg']},
+      {ar:'الأبيض المكسور',fr:'Blanc Cassé',h:'#F5EDD8',imgs:['images/product1/أبيض_مكسور_(Off-White___Cream)_202605111604.jpeg','images/product1/أبيض_مكسور_(Off-White___Cream)_202605111607.jpeg']},
+      {ar:'الرمادي الفاتح',fr:'Gris Clair',h:'#B8B8B8',imgs:['images/product1/رمادي_فاتح_(Light_Gray)_2K_202605111609.jpeg','images/product1/رمادي_فاتح_(Light_Gray)_2K_202605111609.jpeg']},
+      {ar:'الأسود',fr:'Noir',h:'#2C2C2C',imgs:['images/product1/black_1.svg','images/product1/black_1.svg']},
+    ],
+    desc:{
+      ar:{
+        p:['رف جداري عصري بتصميم مودرن وأنيق، مثالي لتنظيم وتزيين المطبخ، الصالون أو أي مساحة داخل المنزل. مصنوع من خشب MDF عالي الجودة بتشطيب خشبي طبيعي يمنح لمسة دافئة وفخمة تناسب مختلف أنماط الديكور العصري.',
+          'التصميم العملي يوفر مساحات متعددة لترتيب التوابل، الأواني الصغيرة، الكتب أو قطع الديكور بشكل منظم وأنيق، مع استغلال مثالي للمساحة على الحائط.'],
+        feats:['✅ مصنوع من خشب MDF متين وعالي الجودة','✅ تصميم عصري مناسب لجميع الديكورات','✅ سهل التركيب والتنظيف','✅ عملي لتنظيم المساحات الصغيرة','✅ تشطيب خشبي أنيق ولمسة مودرن','🚚 التوصيل فابور لجميع الطلبات'],
+        faq:[
+          {q:'❓ شنو نوع الخشب المستعمل؟',a:'المنتج مصنوع من خشب MDF عالي الجودة بتشطيب أنيق ومتين.'},
+          {q:'❓ واش الرف مناسب للمطبخ؟',a:'نعم، مثالي لتنظيم التوابل، الأواني الصغيرة وقطع الديكور داخل المطبخ.'},
+          {q:'❓ واش يمكن استعمالو فغرف أخرى؟',a:'أكيد، يمكن استعماله في الصالون، غرفة النوم، المكتب أو حتى المدخل.'},
+          {q:'❓ واش التركيب ساهل؟',a:'نعم، الرف سهل التركيب ويأتي بتصميم عملي مناسب للحائط.'},
+          {q:'❓ واش التوصيل متوفر؟',a:'نعم 🚚 التوصيل فابور.'},
+          {q:'❓ واش اللون كيكون نفس الصورة؟',a:'نعم، مع احتمال اختلاف بسيط بسبب الإضاءة أو إعدادات الشاشة.'}
+        ]
+      },
+      fr:{
+        p:['Étagère murale moderne avec un design élégant, idéale pour organiser et décorer la cuisine, le salon ou tout espace de la maison. Fabriquée en bois MDF haute qualité avec une finition naturelle chaleureuse.',
+          'Le design pratique offre plusieurs espaces pour ranger les épices, les petits ustensiles, les livres ou les pièces décoratives de manière organisée et élégante.'],
+        feats:['✅ Fabriquée en bois MDF solide et de haute qualité','✅ Design moderne adapté à tous les décors','✅ Facile à installer et à nettoyer','✅ Pratique pour organiser les petits espaces','✅ Finition bois élégante et touche moderne','🚚 Livraison gratuite pour toutes les commandes'],
+        faq:[
+          {q:'❓ Quel type de bois est utilisé ?',a:'Le produit est fabriqué en bois MDF haute qualité avec une finition élégante et durable.'},
+          {q:'❓ L\'étagère convient-elle à la cuisine ?',a:'Oui, idéale pour organiser les épices, les petits ustensiles et les objets décoratifs.'},
+          {q:'❓ Peut-on l\'utiliser dans d\'autres pièces ?',a:'Absolument, utilisable dans le salon, la chambre, le bureau ou l\'entrée.'},
+          {q:'❓ L\'installation est-elle facile ?',a:'Oui, l\'étagère est facile à installer avec un design pratique adapté au mur.'},
+          {q:'❓ La livraison est-elle disponible ?',a:'Oui 🚚 livraison gratuite.'},
+          {q:'❓ La couleur est-elle identique à la photo ?',a:'Oui, avec une légère différence possible due à l\'éclairage ou aux paramètres d\'écran.'}
+        ]
+      }
+    }
+  },
+  2:{
+    name:{ar:'رفوف جدارية عصرية كبيرة — خشب MDF',fr:'Étagères Murales Modernes — Bois MDF (Grandes)'},
+    sub:{ar:'مثالية للحمام، الصالون، غرفة النوم أو المكتب',fr:'Idéales pour salle de bain, salon, chambre ou bureau'},
+    price:219,
+    colors:[
+      {ar:'اللون الأصلي',fr:'Original',h:'#8B5E3C',imgs:['images/product2/اريد_نفس_الصورة_تعدل_غير_202605111553.jpeg','images/product2/اريد_نفس_الصورة_تعدل_غير_202605111553.jpeg']},
+      {ar:'الخشبي الفاتح',fr:'Chêne Clair',h:'#C4956A',imgs:['images/product2/خشبي_فاتح_(Oak___Beige_202605111558.jpeg','images/product2/خشبي_فاتح_(Oak___Beige_202605111558.jpeg']},
+      {ar:'الرمادي الفاتح',fr:'Gris Clair',h:'#B8B8B8',imgs:['images/product2/رمادي_فاتح_(Light_Gray)_2K_202605111559.jpeg','images/product2/رمادي_فاتح_(Light_Gray)_2K_202605111559.jpeg']},
+      {ar:'الأبيض',fr:'Blanc',h:'#F0EDE8',imgs:['images/product2/غير_لون_المنتج_الى_أبيض_202605111557.jpeg','images/product2/غير_لون_المنتج_الى_أبيض_202605111557.jpeg']},
+    ],
+    desc:{
+      ar:{
+        p:['رفوف حائط عصرية بتصميم أنيق ولون أزرق ملكي يضيف لمسة فخامة وتنظيم لأي حمام أو غرفة. مصنوعة من خشب MDF عالي الجودة المعروف بالمتانة والسطح الناعم والتشطيب العصري.',
+          'مثالية للحمامات العصرية، الصالونات، غرف النوم وحتى المكاتب، حيث تجمع بين الجمالية والوظيفة في نفس الوقت.'],
+        feats:['✅ تصميم مودرن وأنيق','✅ خشب MDF قوي وعالي الجودة','✅ سهل التركيب والتنظيف','✅ مناسب لمختلف الديكورات','✅ مساحات تخزين عملية ومنظمة','🚚 التوصيل متوفر بالمجان (فابور)'],
+        faq:[
+          {q:'❓ شنو نوع الخشب المستعمل؟',a:'المنتج مصنوع من خشب MDF عالي الجودة بتشطيب عصري ومتين.'},
+          {q:'❓ واش الرفوف مقاومة للرطوبة؟',a:'نعم، مناسبة للاستعمال اليومي داخل الحمام مع الحفاظ عليها من تعرض مباشر ومفرط للماء.'},
+          {q:'❓ واش التركيب ساهل؟',a:'نعم، الرفوف سهلة التركيب وتجي بتصميم عملي مناسب للحائط.'},
+          {q:'❓ واش التوصيل متوفر؟',a:'نعم 🚚 التوصيل فابور لجميع الطلبات.'},
+          {q:'❓ فين يمكن نستعمل هاد الرفوف؟',a:'يمكن استعمالها في الحمام، غرفة النوم، الصالون، المطبخ أو المكتب.'},
+          {q:'❓ واش اللون كيبقى نفس اللي فالصورة؟',a:'نعم، نحاول نوفر نفس اللون والتشطيب كما هو موضح في الصور، مع احتمال فرق خفيف بسبب الإضاءة.'}
+        ]
+      },
+      fr:{
+        p:['Étagères murales modernes avec un design élégant en bleu royal qui apporte une touche de luxe à toute salle de bain ou chambre. Fabriquées en bois MDF haute qualité reconnu pour sa solidité et sa finition moderne.',
+          'Idéales pour les salles de bain modernes, les salons, les chambres et même les bureaux, alliant esthétique et fonctionnalité.'],
+        feats:['✅ Design moderne et élégant','✅ Bois MDF solide et de haute qualité','✅ Facile à installer et à nettoyer','✅ Adapté à tous les types de décoration','✅ Espaces de rangement pratiques et organisés','🚚 Livraison disponible gratuitement'],
+        faq:[
+          {q:'❓ Quel type de bois est utilisé ?',a:'Le produit est fabriqué en bois MDF haute qualité avec une finition moderne et durable.'},
+          {q:'❓ Les étagères résistent-elles à l\'humidité ?',a:'Oui, adaptées à un usage quotidien en salle de bain, en évitant une exposition directe et excessive à l\'eau.'},
+          {q:'❓ L\'installation est-elle facile ?',a:'Oui, les étagères sont faciles à installer avec un design pratique adapté au mur.'},
+          {q:'❓ La livraison est-elle disponible ?',a:'Oui 🚚 livraison gratuite pour toutes les commandes.'},
+          {q:'❓ Où peut-on utiliser ces étagères ?',a:'Dans la salle de bain, la chambre, le salon, la cuisine ou le bureau.'},
+          {q:'❓ La couleur est-elle identique à la photo ?',a:'Oui, nous essayons de fournir la même couleur que sur les photos, avec une légère différence possible due à l\'éclairage.'}
+        ]
+      }
+    }
+  }
+};
+
+/* ═══ STATE ═══ */
+let currentLang=localStorage.getItem('lang')||'ar';
+let productId=1;
+let currentColor=0;
+let currentImgIdx=0;
+
+/* ═══ INIT ═══ */
+function init(){
+  const params=new URLSearchParams(location.search);
+  productId=parseInt(params.get('id'))||1;
+  if(!PRODUCTS[productId]) productId=1;
+  buildPage();
+  applyLang(currentLang);
+}
+
+function buildPage(){
+  const prod=PRODUCTS[productId];
+  const lang=currentLang;
+
+  document.title=(prod.name[lang]||prod.name.ar)+' — متجر الرفوف';
+  document.getElementById('breadProd').textContent=prod.name[lang]||prod.name.ar;
+  document.getElementById('prodTitle').textContent=prod.name[lang]||prod.name.ar;
+  document.getElementById('prodSub').textContent=prod.sub[lang]||prod.sub.ar;
+  document.getElementById('prodPrice').innerHTML=prod.price+'<small style="font-size:16px;color:var(--text-light);font-weight:600"> '+(lang==='ar'?'درهم':'Dh')+'</small>';
+
+  buildColorDots();
+  selectColor(0);
+  buildDesc();
+  buildFaq();
+}
+
+function buildColorDots(){
+  const prod=PRODUCTS[productId];
+  const wrap=document.getElementById('colorDots');
+  wrap.innerHTML='';
+  prod.colors.forEach((c,i)=>{
+    const b=document.createElement('button');
+    b.type='button';b.className='cdot'+(i===0?' active':'');
+    b.style.background=c.h;
+    if(c.h==='#F0EDE8') b.style.outline='1.5px solid #ccc';
+    b.onclick=()=>selectColor(i);
+    wrap.appendChild(b);
+  });
+}
+
+function selectColor(ci){
+  currentColor=ci;currentImgIdx=0;
+  const prod=PRODUCTS[productId];const c=prod.colors[ci];
+  document.querySelectorAll('#colorDots .cdot').forEach((d,i)=>d.classList.toggle('active',i===ci));
+  document.getElementById('colorName').textContent=c[currentLang]||c.ar;
+  buildThumbs(ci);
+  setMainImg(c.imgs[0]);
+  updateOrderLinks(ci);
+}
+
+function buildThumbs(ci){
+  const imgs=PRODUCTS[productId].colors[ci].imgs;
+  const wrap=document.getElementById('thumbsRow');
+  wrap.innerHTML='';
+  imgs.forEach((src,i)=>{
+    const d=document.createElement('div');
+    d.className='thumb'+(i===0?' active':'');
+    d.onclick=()=>{currentImgIdx=i;selectThumb(i,ci)};
+    const img=document.createElement('img');
+    img.src=src;img.alt='';
+    img.onerror=function(){this.parentNode.innerHTML='<div class="thumb-ph"><i class="fa-solid fa-image"></i></div>'};
+    d.appendChild(img);wrap.appendChild(d);
+  });
+}
+
+function selectThumb(ii,ci){
+  currentImgIdx=ii;
+  document.querySelectorAll('#thumbsRow .thumb').forEach((t,i)=>t.classList.toggle('active',i===ii));
+  setMainImg(PRODUCTS[productId].colors[ci].imgs[ii]);
+}
+
+function slideImg(dir){
+  const imgs=PRODUCTS[productId].colors[currentColor].imgs;
+  currentImgIdx=(currentImgIdx+dir+imgs.length)%imgs.length;
+  selectThumb(currentImgIdx,currentColor);
+}
+
+function setMainImg(src){
+  const img=document.getElementById('mainImg');
+  const ph=document.getElementById('gPh');
+  img.src=src;
+  img.onerror=function(){this.style.display='none';ph.style.display='flex'};
+  img.onload=function(){this.style.display='block';ph.style.display='none'};
+}
+
+function buildDesc(){
+  const prod=PRODUCTS[productId];
+  const d=prod.desc[currentLang]||prod.desc.ar;
+  let html='';
+  d.p.forEach(p=>{html+=`<p class="desc-text">${p}</p>`});
+  html+='<div class="feat-list">';
+  d.feats.forEach(f=>{html+=`<p>${f}</p>`});
+  html+='</div>';
+  document.getElementById('descContent').innerHTML=html;
+}
+
+function buildFaq(){
+  const prod=PRODUCTS[productId];
+  const d=prod.desc[currentLang]||prod.desc.ar;
+  let html='';
+  d.faq.forEach(item=>{
+    html+=`<div class="faq-item">
+      <div class="faq-q">${item.q}</div>
+      <div class="faq-a">${item.a}</div>
+    </div>`;
+  });
+  document.getElementById('faqContent').innerHTML=html;
+}
+
+function updateOrderLinks(ci){
+  const prod=PRODUCTS[productId];
+  const c=prod.colors[ci];
+  const name=prod.name[currentLang]||prod.name.ar;
+  const col=c[currentLang]||c.ar;
+  const msg=currentLang==='ar'
+    ?`السلام عليكم، بغيت نطلب ${name} بلون ${col} (${prod.price} درهم)`
+    :`Bonjour, je veux commander ${name} en couleur ${col} (${prod.price} Dh)`;
+  const url='https://wa.me/212771263305?text='+encodeURIComponent(msg);
+  document.getElementById('orderBtn').href=url;
+  document.getElementById('stickyOrder').querySelector('a').href=url;
+}
+
+function shareProduct(){
+  if(navigator.share){
+    navigator.share({title:document.title,url:location.href});
+  } else {
+    navigator.clipboard.writeText(location.href).then(()=>{
+      alert(currentLang==='ar'?'تم نسخ الرابط!':'Lien copié !');
+    });
+  }
+}
+
+/* ═══ LANG ═══ */
+function applyLang(lang){
+  currentLang=lang;
+  localStorage.setItem('lang',lang);
+  const html=document.documentElement;
+  html.lang=lang;html.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.dataset.i18n;
+    if(T[lang]&&T[lang][k]!==undefined) el.textContent=T[lang][k];
+  });
+  const btn=document.getElementById('langBtn');
+  if(btn) btn.textContent=lang==='ar'?'🇫🇷 FR':'🇲🇦 AR';
+  // back arrow direction
+  const backIcon=document.querySelector('.back-btn i');
+  if(backIcon) backIcon.className='fa-solid '+(lang==='ar'?'fa-arrow-right':'fa-arrow-left');
+  // rebuild content
+  buildPage();
+}
+function toggleLang(){applyLang(currentLang==='ar'?'fr':'ar');}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#F5F5F3"/><stop offset="1" stop-color="#EAEAE8"/></linearGradient>
+<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#555555"/><stop offset="1" stop-color="#3D3D3D"/></linearGradient>
+<filter id="f" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(0,0,0,0.22)"/></filter>
+</defs>
+<rect width="500" height="500" fill="url(#bg)"/>
+<rect y="375" width="500" height="125" fill="#E0E0DE"/>
+<line x1="0" y1="375" x2="500" y2="375" stroke="#CCCCCC" stroke-width="1.5"/>
+<g filter="url(#f)">
+  <rect x="55" y="228" width="390" height="24" rx="5" fill="url(#s)"/>
+  <rect x="55" y="249" width="390" height="13" rx="0 0 5 5" fill="#2A2A2A"/>
+  <rect x="82" y="262" width="16" height="60" rx="8 8 4 4" fill="#282828"/>
+  <rect x="71" y="313" width="38" height="11" rx="5" fill="#1A1A1A"/>
+  <rect x="402" y="262" width="16" height="60" rx="8 8 4 4" fill="#282828"/>
+  <rect x="391" y="313" width="38" height="11" rx="5" fill="#1A1A1A"/>
+</g>
+<circle cx="90" cy="236" r="5" fill="#A0A0A0" stroke="#787878" stroke-width="1"/>
+<circle cx="410" cy="236" r="5" fill="#A0A0A0" stroke="#787878" stroke-width="1"/>
+<!-- Plant -->
+<rect x="110" y="208" width="30" height="20" rx="4" fill="#9A7020"/>
+<ellipse cx="125" cy="208" rx="14" ry="6" fill="#AC8028"/>
+<path d="M125,206 Q111,197 109,180 Q119,176 122,196Z" fill="#43A047"/>
+<path d="M125,206 Q125,188 132,175 Q140,185 133,204Z" fill="#66BB6A"/>
+<path d="M125,206 Q139,197 141,180 Q131,176 128,196Z" fill="#2E7D32"/>
+<!-- Books -->
+<rect x="192" y="200" width="20" height="28" rx="2" fill="#F44336"/>
+<rect x="214" y="206" width="17" height="22" rx="2" fill="#FFD740"/>
+<rect x="233" y="210" width="15" height="18" rx="2" fill="#69F0AE"/>
+<!-- Vase gold for contrast -->
+<path d="M314,226Q299,221,302,206Q306,188,319,188Q332,188,336,206Q340,221,325,226Z" fill="#D4AF37"/>
+<ellipse cx="319" cy="226" rx="15" ry="6" fill="#B8960A"/>
+<line x1="314" y1="190" x2="307" y2="172" stroke="#4CAF50" stroke-width="1.5"/>
+<circle cx="307" cy="172" r="6" fill="#EF9A9A"/>
+<line x1="319" y1="190" x2="319" y2="169" stroke="#4CAF50" stroke-width="1.5"/>
+<circle cx="319" cy="169" r="6" fill="#FFF176"/>
+<line x1="324" y1="190" x2="331" y2="173" stroke="#4CAF50" stroke-width="1.5"/>
+<circle cx="331" cy="173" r="5" fill="#EF9A9A"/>
+<!-- Candle -->
+<rect x="398" y="210" width="30" height="18" rx="6" fill="#EEEEEE"/>
+<ellipse cx="413" cy="210" rx="11" ry="4" fill="#E0E0E0"/>
+<rect x="411" y="196" width="4" height="14" fill="#BDBDBD"/>
+<path d="M409,196Q408,189,413,187Q418,189,417,196Z" fill="#FFB300"/>
+</svg>

@@ -6,6 +6,7 @@
 <title>متجر الرفوف العصرية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --primary:#8B5E3C;--primary-dark:#6B4226;--primary-light:#F5E6D3;
@@ -227,6 +228,13 @@ footer{background:var(--primary-dark);padding:40px 20px 24px}
 .merchant-btn i{color:#b8941e}
 @media(max-width:640px){.merchant-btn span{display:none}}
 
+/* DB PRODUCTS SKELETON */
+@keyframes skShim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.db-skel{background:var(--card-bg);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.db-skel-img{height:240px;background:linear-gradient(90deg,#f0e8e0 25%,#e8dbd0 50%,#f0e8e0 75%);background-size:200% 100%;animation:skShim 1.4s infinite}
+.db-skel-body{padding:18px}
+.db-skel-ln{border-radius:6px;margin-bottom:10px;background:linear-gradient(90deg,#f0e8e0 25%,#e8dbd0 50%,#f0e8e0 75%);background-size:200% 100%;animation:skShim 1.4s infinite}
+
 /* LTR adjustments for French */
 html[dir="ltr"] .feat-list{border-right:none;border-left:3px solid #22c55e}
 html[dir="ltr"] .desc-btn{text-align:left}
@@ -322,7 +330,7 @@ html[dir="ltr"] .nav-logo{margin-right:0}
     <h2 class="sec-title" data-i18n="sec.prod.title">اختر الرف المناسب لبيتك</h2>
     <p class="sec-sub" data-i18n="sec.prod.sub">جميع منتجاتنا مصنوعة من خشب MDF عالي الجودة مع توصيل مجاني لجميع مدن المغرب</p>
   </div>
-  <div class="products-grid">
+  <div class="products-grid" id="productsGrid">
 
     <!-- PRODUCT 1 – 180 DH -->
     <div class="prod-card" id="p1">
@@ -711,6 +719,99 @@ function adjustNav(){
 }
 window.addEventListener('resize',adjustNav);
 adjustNav();
+
+/* ══════════════════════════════════════════════════
+   SUPABASE — تحميل المنتجات الجديدة أوتوماتيكياً
+   المنتجات من قاعدة البيانات تظهر قبل المنتجات الثابتة
+══════════════════════════════════════════════════ */
+(function () {
+  var SB_URL = 'https://bylisjawltitosfbtwzw.supabase.co';
+  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bGlzamF3bHRpdG9zZmJ0d3p3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NTYwNzEsImV4cCI6MjA5NDQzMjA3MX0.aRq9q5qV8_0lwiv5rQQRaHcb7GdBBjNmxcOtV1mfvdE';
+  var sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+  var WA = '212771263305';
+  var GRID = document.getElementById('productsGrid');
+  if (!GRID) return;
+
+  /* Skeleton placeholders يظهرون ريثما يتحمل البيانات */
+  var skelWrap = document.createElement('div');
+  skelWrap.id = 'dbSkelWrap';
+  skelWrap.style.display = 'contents';
+  for (var s = 0; s < 2; s++) {
+    skelWrap.innerHTML += '<div class="db-skel">' +
+      '<div class="db-skel-img"></div>' +
+      '<div class="db-skel-body">' +
+        '<div class="db-skel-ln" style="height:16px"></div>' +
+        '<div class="db-skel-ln" style="height:12px;width:65%"></div>' +
+        '<div class="db-skel-ln" style="height:22px;width:35%"></div>' +
+      '</div>' +
+    '</div>';
+  }
+  GRID.insertAdjacentElement('afterbegin', skelWrap);
+
+  /* Fetch من Supabase */
+  sb.from('products')
+    .select('id, name, price, description, color, size, image_url')
+    .order('created_at', { ascending: false })
+    .then(function (res) {
+      /* إزالة الـ skeletons */
+      var sk = document.getElementById('dbSkelWrap');
+      if (sk) sk.remove();
+
+      if (res.error || !res.data || !res.data.length) return;
+
+      var badges = ['🆕 جديد', '⭐ مميز', '🔥 رائج', '✨ حصري'];
+
+      var html = res.data.map(function (p, i) {
+        /* رسالة واتساب ذكية — تحمل اسم المنتج والثمن */
+        var waMsg = 'السلام عليكم، بغيت نشري ' + p.name + ' — الثمن: ' + p.price + ' درهم';
+        var waUrl = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(waMsg);
+
+        /* الصورة أو placeholder */
+        var imgBlock = p.image_url
+          ? '<img src="' + h(p.image_url) + '" class="active" alt="' + h(p.name) + '" loading="lazy"' +
+            ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+            '<div class="g-ph" style="display:none"><i class="fa-solid fa-layer-group"></i><span>' + h(p.name) + '</span></div>'
+          : '<div class="g-ph"><i class="fa-solid fa-layer-group"></i><span>' + h(p.name) + '</span></div>';
+
+        /* الوصف المختصر */
+        var sub = p.description
+          ? (p.description.length > 72 ? p.description.slice(0, 72) + '...' : p.description)
+          : (p.color ? 'اللون: ' + p.color + (p.size ? ' | القياس: ' + p.size : '') : 'منتج جديد من متجرنا');
+
+        return (
+          '<div class="prod-card">' +
+            '<div class="gallery">' +
+              imgBlock +
+              '<div class="g-badge">' + (badges[i % badges.length]) + '</div>' +
+              '<div class="g-ship">🚚 فابور</div>' +
+            '</div>' +
+            '<div class="card-body">' +
+              '<div class="card-name">' + h(p.name) + '</div>' +
+              '<div class="card-sub">' + h(sub) + '</div>' +
+              '<div class="price-row">' +
+                '<div class="price">' + Number(p.price).toLocaleString('ar') + ' <small>درهم</small></div>' +
+                '<div class="stars-wrap"><span class="stars">★★★★★</span><span class="stars-val">5.0</span></div>' +
+              '</div>' +
+              '<a href="' + waUrl + '" class="order-btn" target="_blank" rel="noopener">' +
+                '<i class="fa-brands fa-whatsapp" style="font-size:19px"></i>' +
+                '<span>اطلب الآن عبر واتساب</span>' +
+              '</a>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+
+      /* إدراج منتجات قاعدة البيانات في البداية */
+      GRID.insertAdjacentHTML('afterbegin', html);
+    });
+
+  function h(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+})();
 </script>
 </body>
 </html>

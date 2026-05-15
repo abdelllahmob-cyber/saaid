@@ -229,7 +229,6 @@ footer{background:var(--primary-dark);padding:40px 20px 24px}
 .merchant-btn{display:flex;align-items:center;gap:5px;background:rgba(212,175,55,.12);border:1.5px solid rgba(212,175,55,.55);color:var(--primary-dark);padding:7px 12px;border-radius:20px;font-family:'Cairo',sans-serif;font-size:11.5px;font-weight:800;text-decoration:none;transition:.2s;white-space:nowrap;flex-shrink:0}
 .merchant-btn:hover{background:rgba(212,175,55,.22);border-color:rgba(212,175,55,.85);color:var(--primary)}
 .merchant-btn i{color:#b8941e}
-@media(max-width:640px){.merchant-btn span{display:none}}
 
 /* ── PRODUCT DETAILS MODAL ── */
 .prod-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:600;display:none;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(6px)}
@@ -293,7 +292,7 @@ html[dir="ltr"] .desc-btn{text-align:left}
 html[dir="ltr"] .nav-logo{margin-right:0}
 
 /* RESPONSIVE */
-@media(max-width:900px){.nav-links{display:none}.burger{display:flex}.contact-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.nav-links{display:none}.burger{display:flex}.contact-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr 1fr}.nav-wa{display:none}.lang-btn{display:none}.merchant-btn span{display:inline}.merchant-btn{font-size:13px;padding:9px 16px}}
 @media(max-width:640px){section{padding:56px 16px}.hero{padding:52px 16px 60px}.hero-stats{grid-template-columns:repeat(2,1fr)}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;text-align:center}.products-grid{grid-template-columns:1fr}.why-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>

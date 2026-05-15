@@ -168,6 +168,21 @@ textarea.f-inp{resize:vertical;min-height:90px;line-height:1.65}
 .f-msg.ok{background:#e8f8ef;color:#166534;border:1px solid #bbf7d0}
 .f-msg.err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
 .f-preview{width:100%;max-height:160px;object-fit:cover;border-radius:var(--rs);border:1.5px solid var(--border);margin-top:8px;display:none}
+/* IMAGE UPLOAD GRID */
+.img-grid-upload{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.img-slot{position:relative;aspect-ratio:1/1;border:2px dashed var(--border);border-radius:var(--rs);overflow:hidden;background:var(--bg);transition:.2s;cursor:pointer}
+.img-slot:hover{border-color:var(--primary)}
+.img-slot.has-img{border-style:solid;border-color:var(--primary)}
+.img-slot-lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;z-index:1;color:var(--text-light);transition:.2s;pointer-events:none}
+.img-slot-lbl i{font-size:24px;opacity:.5;transition:.2s}
+.img-slot-lbl span{font-size:10.5px;font-weight:700;opacity:.65;text-align:center}
+.img-slot:hover .img-slot-lbl i{opacity:1;color:var(--primary)}
+.img-slot input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;width:100%;height:100%}
+.slot-prev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:3;display:none}
+.slot-clear{position:absolute;top:5px;right:5px;z-index:4;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:12px;display:none;align-items:center;justify-content:center}
+.img-slot.has-img .slot-clear{display:flex}
+.img-slot.has-img .img-slot-lbl{opacity:0}
+.slot-main{box-shadow:0 0 0 2px var(--primary)}
 </style>
 </head>
 <body>
@@ -312,9 +327,33 @@ textarea.f-inp{resize:vertical;min-height:90px;line-height:1.65}
           </div>
         </div>
         <div class="f-group">
-          <label for="pImage">صورة المنتج</label>
-          <input class="f-inp" type="file" id="pImage" required accept="image/*">
-          <img id="imgPreview" class="f-preview" alt="معاينة الصورة">
+          <label>صور المنتج <span style="color:var(--primary);font-weight:600;font-size:11px">(الصورة 1 إلزامية — 4 صور بحد أقصى)</span></label>
+          <div class="img-grid-upload">
+            <div class="img-slot slot-main" id="slot1">
+              <div class="img-slot-lbl"><i class="fa-solid fa-camera"></i><span>⭐ الرئيسية</span></div>
+              <input type="file" id="pImg1" accept="image/*" required onchange="previewSlot(1,this)">
+              <img class="slot-prev" id="prev1" alt="">
+              <button type="button" class="slot-clear" onclick="clearSlot(1)">✕</button>
+            </div>
+            <div class="img-slot" id="slot2">
+              <div class="img-slot-lbl"><i class="fa-solid fa-plus"></i><span>صورة 2</span></div>
+              <input type="file" id="pImg2" accept="image/*" onchange="previewSlot(2,this)">
+              <img class="slot-prev" id="prev2" alt="">
+              <button type="button" class="slot-clear" onclick="clearSlot(2)">✕</button>
+            </div>
+            <div class="img-slot" id="slot3">
+              <div class="img-slot-lbl"><i class="fa-solid fa-plus"></i><span>صورة 3</span></div>
+              <input type="file" id="pImg3" accept="image/*" onchange="previewSlot(3,this)">
+              <img class="slot-prev" id="prev3" alt="">
+              <button type="button" class="slot-clear" onclick="clearSlot(3)">✕</button>
+            </div>
+            <div class="img-slot" id="slot4">
+              <div class="img-slot-lbl"><i class="fa-solid fa-plus"></i><span>صورة 4</span></div>
+              <input type="file" id="pImg4" accept="image/*" onchange="previewSlot(4,this)">
+              <img class="slot-prev" id="prev4" alt="">
+              <button type="button" class="slot-clear" onclick="clearSlot(4)">✕</button>
+            </div>
+          </div>
         </div>
         <div id="formMsg" class="f-msg"></div>
         <button type="submit" id="submitBtn" class="btn-upload">
@@ -486,15 +525,20 @@ const PRODUCTS = {
 };
 
 /* ══════ STATE ══════ */
-let lang   = localStorage.getItem('lang') || 'ar';
-let pid    = parseInt(new URLSearchParams(location.search).get('id')) || 1;
-if (!PRODUCTS[pid]) pid = 1;
+let lang  = localStorage.getItem('lang') || 'ar';
+var rawId = new URLSearchParams(location.search).get('id');
+/* pid: integer للمنتجات الثابتة، string (UUID) للمنتجات من DB */
+let pid   = rawId ? (parseInt(rawId) || rawId) : 1;
 let curImg = 0;
 
 /* ══════ BOOT ══════ */
 window.addEventListener('DOMContentLoaded', function () {
-  applyLang(lang, false);   // set direction first
-  loadProduct();
+  applyLang(lang, false);
+  if (PRODUCTS[pid]) {
+    loadProduct();        /* منتج ثابت */
+  } else {
+    fetchAndDisplayDBProduct(pid); /* منتج من Supabase */
+  }
 });
 
 /* ══════ LOAD PRODUCT ══════ */
@@ -593,6 +637,185 @@ function updateWaLink() {
   document.getElementById('stickyWa').href = url;
 }
 
+/* ══════ DB PRODUCT — جلب وعرض منتج من Supabase ══════ */
+async function fetchAndDisplayDBProduct(productId) {
+  /* حالة تحميل */
+  document.getElementById('prodName').textContent = '...';
+  document.getElementById('gPhTxt').textContent   = '...';
+  document.getElementById('gPh').style.display    = 'flex';
+  document.getElementById('mainImg').style.display = 'none';
+
+  try {
+    var res = await _db.from('products').select('*').eq('id', productId).maybeSingle();
+    if (res.error || !res.data) {
+      document.getElementById('prodName').textContent =
+        lang === 'ar' ? 'المنتج غير موجود' : 'Produit introuvable';
+      return;
+    }
+    displayDBProduct(res.data);
+  } catch (err) {
+    console.error('DB error:', err);
+  }
+}
+
+function displayDBProduct(p) {
+  var name  = p.name  || '';
+  var price = p.price || 0;
+
+  /* ── Meta ── */
+  document.getElementById('bcName').textContent   = name;
+  document.getElementById('prodName').textContent = name;
+  document.getElementById('prodSub').textContent  =
+    p.description ? p.description.slice(0, 90) + (p.description.length > 90 ? '...' : '') : '';
+  document.getElementById('prodPrice').innerHTML  =
+    price + '<small style="font-size:14px;color:var(--text-light);font-weight:600"> ' +
+    (lang === 'ar' ? 'درهم' : 'Dh') + '</small>';
+  document.getElementById('gPhTxt').textContent = name;
+  document.title = name + ' – متجر الرفوف';
+
+  /* ── Gallery (4 صور محتملة) ── */
+  var imgs = [p.image_url, p.image_url2, p.image_url3, p.image_url4].filter(Boolean);
+  buildDBGallery(imgs, name);
+
+  /* ── زر واتساب ذكي بالاسم ── */
+  var waMsg = lang === 'ar'
+    ? 'السلام عليكم، بغيت نطلب ' + name + ' (' + price + ' درهم)'
+    : 'Bonjour, je veux commander ' + name + ' (' + price + ' Dh)';
+  var waUrl = 'https://wa.me/212771263305?text=' + encodeURIComponent(waMsg);
+  document.getElementById('btnWa').href    = waUrl;
+  document.getElementById('stickyWa').href = waUrl;
+
+  /* ── بلوك الوصف ── */
+  document.getElementById('descBlock').innerHTML = buildDBDescBlock(p);
+}
+
+/* ══════ DB GALLERY — يبني السلايدر من مصفوفة الصور ══════ */
+function buildDBGallery(imgs, altText) {
+  var mainImg  = document.getElementById('mainImg');
+  var gPh      = document.getElementById('gPh');
+  var dotsEl   = document.getElementById('mainDots');
+  var thumbEl  = document.getElementById('thumbs');
+  var arrs     = document.querySelectorAll('.arr');
+
+  if (!imgs || !imgs.length) {
+    mainImg.style.display = 'none';
+    gPh.style.display = 'flex';
+    dotsEl.innerHTML  = '';
+    thumbEl.innerHTML = '';
+    arrs.forEach(function (a) { a.style.visibility = 'hidden'; });
+    return;
+  }
+
+  var cur = 0;
+
+  function goTo(i) {
+    cur = (i + imgs.length) % imgs.length;
+    mainImg.src = imgs[cur];
+    mainImg.alt = altText || '';
+    mainImg.style.display = 'block';
+    gPh.style.display = 'none';
+    mainImg.onerror = function () {
+      mainImg.style.display = 'none';
+      gPh.style.display = 'flex';
+    };
+    dotsEl.querySelectorAll('.g-dot').forEach(function (d, j) {
+      d.classList.toggle('on', j === cur);
+    });
+    thumbEl.querySelectorAll('.th').forEach(function (t, j) {
+      t.classList.toggle('on', j === cur);
+    });
+  }
+
+  /* الصورة الأولى */
+  goTo(0);
+
+  /* Dots */
+  dotsEl.innerHTML = '';
+  imgs.forEach(function (_, i) {
+    var d = document.createElement('button');
+    d.className = 'g-dot' + (i === 0 ? ' on' : '');
+    d.onclick = function () { goTo(i); };
+    dotsEl.appendChild(d);
+  });
+
+  /* Thumbnails */
+  thumbEl.innerHTML = '';
+  imgs.forEach(function (src, i) {
+    var div = document.createElement('div');
+    div.className = 'th' + (i === 0 ? ' on' : '');
+    var img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    img.loading = 'lazy';
+    div.onclick = function () { goTo(i); };
+    div.appendChild(img);
+    thumbEl.appendChild(div);
+  });
+
+  /* أسهم التنقل */
+  if (imgs.length > 1) {
+    arrs.forEach(function (a) { a.style.visibility = 'visible'; });
+  } else {
+    arrs.forEach(function (a) { a.style.visibility = 'hidden'; });
+  }
+
+  /* Swipe للموبايل */
+  var mw = document.getElementById('mainWrap');
+  var tx = 0;
+  mw.addEventListener('touchstart', function (ev) { tx = ev.touches[0].clientX; }, { passive: true });
+  mw.addEventListener('touchend',   function (ev) {
+    var dx = ev.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) goTo(cur + (dx > 0 ? -1 : 1));
+  }, { passive: true });
+
+  /* Override الدالتين العامتين باش تشتغل الأسهم */
+  window.goImg = function (i) { goTo(i); };
+  window.slide = function (dir) { goTo(cur + dir); };
+}
+
+function buildDBDescBlock(p) {
+  var html = '<div class="sec-title"><i class="fa-solid fa-file-lines"></i> ' +
+    (lang === 'ar' ? 'وصف المنتج' : 'Description du produit') + '</div>';
+
+  if (p.description && p.description.trim().length > 4) {
+    /* تقسيم الوصف لنقاط */
+    var lines = p.description.split(/\n|\.\s+/)
+      .map(function (l) { return l.trim().replace(/^[-•*✅]\s*/, '').replace(/[.،]+$/, ''); })
+      .filter(function (l) { return l.length > 4; });
+
+    if (lines.length >= 2) {
+      html += '<div class="feat-list">';
+      lines.forEach(function (l) { html += '<p>✅ ' + escH(l) + '</p>'; });
+      html += '</div>';
+    } else {
+      html += '<p class="desc-p">' + escH(p.description) + '</p>';
+    }
+  }
+
+  /* Tags: اللون والقياس */
+  if (p.color || p.size) {
+    html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0">';
+    if (p.color) html += '<span class="bdg bdg-b"><i class="fa-solid fa-palette"></i> ' + escH(p.color) + '</span>';
+    if (p.size)  html += '<span class="bdg bdg-y"><i class="fa-solid fa-ruler"></i> '   + escH(p.size)  + '</span>';
+    html += '</div>';
+  }
+
+  /* مزايا ثابتة */
+  html += '<div class="feat-list" style="margin-top:14px">' +
+    '<p>🚚 التوصيل مجاني لجميع مدن المغرب</p>' +
+    '<p>✅ جودة مضمونة — منتجات أصلية</p>' +
+    '<p>⚡ التوصيل بين 24 و72 ساعة</p>' +
+    '</div>';
+
+  return html;
+}
+
+function escH(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 /* ══════ LANGUAGE ══════ */
 function applyLang(l, reload) {
   lang = l;
@@ -653,27 +876,33 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeAdminModal();
 });
 
-/* Image preview */
-document.addEventListener('DOMContentLoaded', function () {
-  var fileInput = document.getElementById('pImage');
-  var preview   = document.getElementById('imgPreview');
-  if (fileInput) {
-    fileInput.addEventListener('change', function () {
-      var file = fileInput.files[0];
-      if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = 'block';
-      } else {
-        preview.style.display = 'none';
-      }
-    });
+/* ── Image slots: preview + clear ── */
+function previewSlot(n, input) {
+  var file = input.files[0];
+  var prev = document.getElementById('prev' + n);
+  var slot = document.getElementById('slot' + n);
+  if (file) {
+    prev.src = URL.createObjectURL(file);
+    prev.style.display = 'block';
+    slot.classList.add('has-img');
   }
+}
 
+function clearSlot(n) {
+  var inp  = document.getElementById('pImg' + n);
+  var prev = document.getElementById('prev' + n);
+  var slot = document.getElementById('slot' + n);
+  if (inp)  { inp.value = ''; }
+  if (prev) { prev.src = ''; prev.style.display = 'none'; }
+  if (slot) { slot.classList.remove('has-img'); }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('addProductForm');
   if (form) form.addEventListener('submit', submitProduct);
 });
 
-/* Submit — upload image then insert row */
+/* ── Submit: رفع 4 صور وإدخال صف واحد ── */
 async function submitProduct(e) {
   e.preventDefault();
 
@@ -684,45 +913,67 @@ async function submitProduct(e) {
   var desc  = document.getElementById('pDesc').value.trim();
   var color = document.getElementById('pColor').value.trim();
   var size  = document.getElementById('pSize').value.trim();
-  var file  = document.getElementById('pImage').files[0];
 
-  if (!name || !price || !file) return;
+  var files = [
+    document.getElementById('pImg1').files[0] || null,
+    document.getElementById('pImg2').files[0] || null,
+    document.getElementById('pImg3').files[0] || null,
+    document.getElementById('pImg4').files[0] || null
+  ];
+
+  if (!name || !price || !files[0]) {
+    msg.className = 'f-msg err';
+    msg.textContent = '❌ الاسم، الثمن، والصورة الرئيسية إلزامية';
+    msg.style.display = 'block';
+    return;
+  }
 
   btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الرفع...';
   msg.style.display = 'none';
   msg.className = 'f-msg';
 
-  try {
-    /* 1 — Upload image to Storage bucket "products" */
+  var uploaded = [null, null, null, null];
+  var total    = files.filter(Boolean).length;
+  var done     = 0;
+
+  async function uploadOne(file, idx) {
+    if (!file) return;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> رفع الصورة ' + (done + 1) + '/' + total + '...';
     var ext  = file.name.split('.').pop().toLowerCase();
-    var path = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+    var path = Date.now() + '-' + Math.random().toString(36).slice(2) + '-' + (idx + 1) + '.' + ext;
+    var res  = await _db.storage.from('products').upload(path, file, { cacheControl: '3600', upsert: false });
+    if (res.error) throw res.error;
+    uploaded[idx] = _db.storage.from('products').getPublicUrl(path).data.publicUrl;
+    done++;
+  }
 
-    var storageRes = await _db.storage.from('products').upload(path, file, { cacheControl: '3600', upsert: false });
-    if (storageRes.error) throw storageRes.error;
+  try {
+    for (var i = 0; i < 4; i++) await uploadOne(files[i], i);
 
-    /* 2 — Get public URL */
-    var urlRes  = _db.storage.from('products').getPublicUrl(path);
-    var imgUrl  = urlRes.data.publicUrl;
-
-    /* 3 — Insert row into "products" table */
-    var row = { name: name, price: price, image_url: imgUrl };
+    var row = {
+      name: name, price: price,
+      image_url:  uploaded[0],
+      image_url2: uploaded[1] || null,
+      image_url3: uploaded[2] || null,
+      image_url4: uploaded[3] || null
+    };
     if (desc)  row.description = desc;
     if (color) row.color       = color;
     if (size)  row.size        = size;
+
     var dbRes = await _db.from('products').insert(row);
     if (dbRes.error) throw dbRes.error;
 
     msg.className = 'f-msg ok';
-    msg.textContent = '✅ تم نشر المنتج بنجاح! جاري العودة للداشبورد...';
+    msg.textContent = '✅ تم نشر المنتج بنجاح! (' + total + (total === 1 ? ' صورة' : ' صور') + ')';
     msg.style.display = 'block';
     e.target.reset();
-    document.getElementById('imgPreview').style.display = 'none';
-    setTimeout(function(){ closeAdminModal(); window.location.href = 'dashboard.html'; }, 1800);
+    [1, 2, 3, 4].forEach(function (n) { clearSlot(n); });
+    setTimeout(function () { closeAdminModal(); window.location.href = 'dashboard.html'; }, 2000);
 
   } catch (err) {
     msg.className = 'f-msg err';
-    msg.textContent = '❌ خطأ: ' + (err.message || 'فشلت العملية، حاول مجدداً');
+    msg.textContent = '❌ ' + (err.message || 'فشلت العملية، حاول مجدداً');
     msg.style.display = 'block';
   } finally {
     btn.disabled = false;

@@ -228,6 +228,55 @@ footer{background:var(--primary-dark);padding:40px 20px 24px}
 .merchant-btn i{color:#b8941e}
 @media(max-width:640px){.merchant-btn span{display:none}}
 
+/* ── PRODUCT DETAILS MODAL ── */
+.prod-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:600;display:none;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(6px)}
+.prod-modal-bg.open{display:flex;animation:pmFdIn .28s ease}
+@keyframes pmFdIn{from{opacity:0}to{opacity:1}}
+.prod-modal-box{background:#fff;border-radius:20px;width:100%;max-width:700px;max-height:93vh;overflow:hidden;box-shadow:0 28px 72px rgba(0,0,0,.3);display:grid;grid-template-columns:1fr 1fr;position:relative;animation:pmSlUp .3s ease}
+@keyframes pmSlUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.pm-close{position:absolute;top:12px;right:12px;z-index:20;width:36px;height:36px;border:none;background:rgba(0,0,0,.5);border-radius:50%;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.pm-close:hover{background:rgba(0,0,0,.75)}
+.pm-img-col{overflow:hidden;border-radius:20px 0 0 20px;background:var(--primary-light);position:relative}
+html[dir="ltr"] .pm-img-col{border-radius:0 20px 20px 0}
+.pm-img{width:100%;height:100%;object-fit:cover;display:block}
+.pm-img-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--primary-light),#e8d5c0);color:var(--primary)}
+.pm-img-ph i{font-size:52px;opacity:.5;margin-bottom:10px}
+.pm-img-ph span{font-size:12px;font-weight:700;opacity:.6}
+.pm-body{padding:24px 22px 22px;overflow-y:auto;max-height:93vh}
+.pm-badge-row{display:flex;align-items:center;gap:7px;margin-bottom:12px;flex-wrap:wrap}
+.pm-badge{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800}
+.pm-badge-ship{background:var(--whatsapp);color:#fff;padding:4px 10px;border-radius:20px;font-size:10.5px;font-weight:800}
+.pm-name{font-size:18px;font-weight:900;color:var(--text);line-height:1.35;margin-bottom:8px}
+.pm-stars{display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.pm-stars-ico{font-size:14px;color:#f0b429}
+.pm-stars-lbl{font-size:11.5px;font-weight:600;color:var(--text-light)}
+.pm-price-box{background:linear-gradient(135deg,var(--primary-light),#fff);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 15px;margin-bottom:14px}
+.pm-price{font-size:32px;font-weight:900;color:var(--primary);line-height:1}
+.pm-price small{font-size:13px;font-weight:600;color:var(--text-light)}
+.pm-ship-note{font-size:11.5px;font-weight:700;color:var(--whatsapp);margin-top:4px;display:flex;align-items:center;gap:4px}
+.pm-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.pm-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.pm-tag-color{background:var(--primary-light);color:var(--primary)}
+.pm-tag-size{background:#eff6ff;color:#1d4ed8}
+.pm-divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.pm-desc-ttl{font-size:13px;font-weight:800;color:var(--primary-dark);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.pm-desc-text{font-size:13px;color:var(--text);line-height:1.85;margin-bottom:8px}
+.pm-list{padding-right:4px;margin:0 0 10px;list-style:none}
+html[dir="ltr"] .pm-list{padding-left:4px;padding-right:0}
+.pm-list li{font-size:13px;color:var(--text);line-height:1.75;margin-bottom:6px;display:flex;align-items:flex-start;gap:8px}
+.pm-list li::before{content:"✅";flex-shrink:0;font-size:12px;margin-top:2px}
+.pm-perks{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0 14px}
+.pm-perk{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 5px;text-align:center;font-size:10.5px;font-weight:700;color:var(--text-light)}
+.pm-perk i{display:block;font-size:17px;margin-bottom:4px;color:var(--primary)}
+.pm-wa-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:14px;background:linear-gradient(135deg,var(--whatsapp),var(--whatsapp-dark));color:#fff;text-decoration:none;border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:14.5px;font-weight:900;box-shadow:0 4px 16px rgba(37,211,102,.35);transition:.22s}
+.pm-wa-btn:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(37,211,102,.45)}
+@media(max-width:650px){
+  .prod-modal-box{grid-template-columns:1fr}
+  .pm-img-col{aspect-ratio:16/9;border-radius:20px 20px 0 0;min-height:0}
+  html[dir="ltr"] .pm-img-col{border-radius:20px 20px 0 0}
+  .pm-body{padding:18px 16px 16px;max-height:60vh}
+}
+
 /* DB PRODUCTS SKELETON */
 @keyframes skShim{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .db-skel{background:var(--card-bg);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
@@ -525,6 +574,50 @@ html[dir="ltr"] .nav-logo{margin-right:0}
     <span data-i18n="wa.label">تواصل معنا</span>
   </a>
 </div>
+<!-- PRODUCT DETAILS MODAL (DB products) -->
+<div id="prodModal" class="prod-modal-bg" onclick="if(event.target===this)closeProdModal()">
+  <div class="prod-modal-box">
+    <button class="pm-close" onclick="closeProdModal()" title="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+    <!-- صورة المنتج -->
+    <div class="pm-img-col">
+      <img id="pmImg" class="pm-img" src="" alt="">
+      <div id="pmImgPh" class="pm-img-ph">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>لا توجد صورة</span>
+      </div>
+    </div>
+    <!-- معلومات المنتج -->
+    <div class="pm-body">
+      <div class="pm-badge-row">
+        <span class="pm-badge" id="pmBadge">✨ من متجرنا</span>
+        <span class="pm-badge-ship">🚚 توصيل مجاني</span>
+      </div>
+      <h2 id="pmName" class="pm-name"></h2>
+      <div class="pm-stars">
+        <span class="pm-stars-ico">★★★★★</span>
+        <span class="pm-stars-lbl">(+500 زبون راضي)</span>
+      </div>
+      <div class="pm-price-box">
+        <div class="pm-price" id="pmPrice"></div>
+        <div class="pm-ship-note"><i class="fa-solid fa-truck-fast"></i> التوصيل فابور لجميع المدن</div>
+      </div>
+      <div id="pmTags" class="pm-tags"></div>
+      <hr class="pm-divider">
+      <div class="pm-desc-ttl"><i class="fa-solid fa-file-lines"></i> وصف المنتج</div>
+      <div id="pmDesc"></div>
+      <div class="pm-perks">
+        <div class="pm-perk"><i class="fa-solid fa-truck-fast"></i>توصيل مجاني</div>
+        <div class="pm-perk"><i class="fa-solid fa-shield-halved"></i>جودة مضمونة</div>
+        <div class="pm-perk"><i class="fa-solid fa-bolt"></i>24–72 ساعة</div>
+      </div>
+      <a id="pmWaBtn" href="#" class="pm-wa-btn" target="_blank" rel="noopener">
+        <i class="fa-brands fa-whatsapp" style="font-size:20px"></i>
+        اطلب الآن عبر واتساب
+      </a>
+    </div>
+  </div>
+</div>
+
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
 
 <script>
@@ -721,91 +814,163 @@ window.addEventListener('resize',adjustNav);
 adjustNav();
 
 /* ══════════════════════════════════════════════════
-   SUPABASE — تحميل المنتجات الجديدة أوتوماتيكياً
-   المنتجات من قاعدة البيانات تظهر قبل المنتجات الثابتة
+   SUPABASE — تحميل المنتجات + Details Modal
 ══════════════════════════════════════════════════ */
 (function () {
   var SB_URL = 'https://bylisjawltitosfbtwzw.supabase.co';
   var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bGlzamF3bHRpdG9zZmJ0d3p3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NTYwNzEsImV4cCI6MjA5NDQzMjA3MX0.aRq9q5qV8_0lwiv5rQQRaHcb7GdBBjNmxcOtV1mfvdE';
-  var sb = window.supabase.createClient(SB_URL, SB_KEY);
-
-  var WA = '212771263305';
+  var sb  = window.supabase.createClient(SB_URL, SB_KEY);
+  var WA  = '212771263305';
   var GRID = document.getElementById('productsGrid');
   if (!GRID) return;
 
-  /* Skeleton placeholders يظهرون ريثما يتحمل البيانات */
+  var dbCache = {}; // id → product
+
+  /* ── Skeleton placeholders ── */
   var skelWrap = document.createElement('div');
   skelWrap.id = 'dbSkelWrap';
   skelWrap.style.display = 'contents';
   for (var s = 0; s < 2; s++) {
-    skelWrap.innerHTML += '<div class="db-skel">' +
-      '<div class="db-skel-img"></div>' +
+    skelWrap.innerHTML +=
+      '<div class="db-skel"><div class="db-skel-img"></div>' +
       '<div class="db-skel-body">' +
         '<div class="db-skel-ln" style="height:16px"></div>' +
         '<div class="db-skel-ln" style="height:12px;width:65%"></div>' +
         '<div class="db-skel-ln" style="height:22px;width:35%"></div>' +
-      '</div>' +
-    '</div>';
+      '</div></div>';
   }
   GRID.insertAdjacentElement('afterbegin', skelWrap);
 
-  /* Fetch من Supabase */
+  /* ── Fetch ── */
   sb.from('products')
     .select('id, name, price, description, color, size, image_url')
     .order('created_at', { ascending: false })
     .then(function (res) {
-      /* إزالة الـ skeletons */
       var sk = document.getElementById('dbSkelWrap');
       if (sk) sk.remove();
-
       if (res.error || !res.data || !res.data.length) return;
+
+      res.data.forEach(function (p) { dbCache[String(p.id)] = p; });
 
       var badges = ['🆕 جديد', '⭐ مميز', '🔥 رائج', '✨ حصري'];
 
       var html = res.data.map(function (p, i) {
-        /* رسالة واتساب ذكية — تحمل اسم المنتج والثمن */
-        var waMsg = 'السلام عليكم، بغيت نشري ' + p.name + ' — الثمن: ' + p.price + ' درهم';
-        var waUrl = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(waMsg);
-
-        /* الصورة أو placeholder */
+        var safeId  = String(p.id).replace(/['"\\]/g, '');
+        var waMsg   = 'السلام عليكم، بغيت نشري ' + p.name + ' — الثمن: ' + p.price + ' درهم';
+        var waUrl   = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(waMsg);
+        var sub     = p.description
+          ? (p.description.length > 72 ? p.description.slice(0, 72) + '...' : p.description)
+          : (p.color ? 'اللون: ' + p.color + (p.size ? ' | ' + p.size : '') : 'منتج جديد من متجرنا');
         var imgBlock = p.image_url
           ? '<img src="' + h(p.image_url) + '" class="active" alt="' + h(p.name) + '" loading="lazy"' +
             ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
-            '<div class="g-ph" style="display:none"><i class="fa-solid fa-layer-group"></i><span>' + h(p.name) + '</span></div>'
+            '<div class="g-ph" style="display:none"><i class="fa-solid fa-layer-group"></i>' +
+            '<span>' + h(p.name) + '</span></div>'
           : '<div class="g-ph"><i class="fa-solid fa-layer-group"></i><span>' + h(p.name) + '</span></div>';
-
-        /* الوصف المختصر */
-        var sub = p.description
-          ? (p.description.length > 72 ? p.description.slice(0, 72) + '...' : p.description)
-          : (p.color ? 'اللون: ' + p.color + (p.size ? ' | القياس: ' + p.size : '') : 'منتج جديد من متجرنا');
 
         return (
           '<div class="prod-card">' +
             '<div class="gallery">' +
               imgBlock +
-              '<div class="g-badge">' + (badges[i % badges.length]) + '</div>' +
+              '<div class="g-badge">' + badges[i % badges.length] + '</div>' +
               '<div class="g-ship">🚚 فابور</div>' +
             '</div>' +
             '<div class="card-body">' +
               '<div class="card-name">' + h(p.name) + '</div>' +
               '<div class="card-sub">' + h(sub) + '</div>' +
               '<div class="price-row">' +
-                '<div class="price">' + Number(p.price).toLocaleString('ar') + ' <small>درهم</small></div>' +
-                '<div class="stars-wrap"><span class="stars">★★★★★</span><span class="stars-val">5.0</span></div>' +
+                '<div class="price">' + Number(p.price).toLocaleString('ar') +
+                  ' <small>درهم</small></div>' +
+                '<div class="stars-wrap"><span class="stars">★★★★★</span>' +
+                  '<span class="stars-val">5.0</span></div>' +
               '</div>' +
               '<a href="' + waUrl + '" class="order-btn" target="_blank" rel="noopener">' +
                 '<i class="fa-brands fa-whatsapp" style="font-size:19px"></i>' +
                 '<span>اطلب الآن عبر واتساب</span>' +
               '</a>' +
+              '<button class="details-btn" onclick="openProdModal(\'' + safeId + '\')">' +
+                '<i class="fa-solid fa-magnifying-glass"></i>' +
+                '<span>عرض تفاصيل المنتج</span>' +
+              '</button>' +
             '</div>' +
           '</div>'
         );
       }).join('');
 
-      /* إدراج منتجات قاعدة البيانات في البداية */
       GRID.insertAdjacentHTML('afterbegin', html);
     });
 
+  /* ══════════════════════════════════════════
+     DETAILS MODAL — open / close / populate
+  ══════════════════════════════════════════ */
+  window.openProdModal = function (id) {
+    var p = dbCache[String(id)];
+    if (!p) return;
+
+    /* صورة */
+    var imgEl = document.getElementById('pmImg');
+    var imgPh = document.getElementById('pmImgPh');
+    if (p.image_url) {
+      imgEl.src = p.image_url;
+      imgEl.alt = p.name;
+      imgEl.style.display = 'block';
+      imgPh.style.display = 'none';
+      imgEl.onerror = function () { imgEl.style.display = 'none'; imgPh.style.display = 'flex'; };
+    } else {
+      imgEl.style.display = 'none';
+      imgPh.style.display = 'flex';
+    }
+
+    /* نص */
+    document.getElementById('pmName').textContent = p.name;
+    document.getElementById('pmPrice').innerHTML  =
+      Number(p.price).toLocaleString('ar') + ' <small>درهم</small>';
+
+    /* Tags: اللون + القياس */
+    var tags = '';
+    if (p.color) tags += '<span class="pm-tag pm-tag-color"><i class="fa-solid fa-palette"></i> ' + h(p.color) + '</span>';
+    if (p.size)  tags += '<span class="pm-tag pm-tag-size"><i class="fa-solid fa-ruler"></i> ' + h(p.size) + '</span>';
+    document.getElementById('pmTags').innerHTML = tags;
+
+    /* وصف منسق */
+    document.getElementById('pmDesc').innerHTML = fmtDesc(p.description);
+
+    /* زر واتساب ذكي */
+    var msg = 'السلام عليكم، بغيت نشري ' + p.name + ' — الثمن: ' + p.price + ' درهم';
+    document.getElementById('pmWaBtn').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
+
+    document.getElementById('prodModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeProdModal = function () {
+    document.getElementById('prodModal').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') window.closeProdModal();
+  });
+
+  /* ── Format description as bullet list ── */
+  function fmtDesc(desc) {
+    if (!desc || desc.trim().length < 5)
+      return '<p class="pm-desc-text">منتج مميز من متجر الرفوف العصرية.</p>';
+
+    /* تقسيم بالأسطر أو بعد النقطة */
+    var parts = desc.split(/\n|\.\s+/)
+      .map(function (l) { return l.trim().replace(/^[-•*✅]\s*/, '').replace(/\.+$/, ''); })
+      .filter(function (l) { return l.length > 4; });
+
+    if (parts.length >= 2) {
+      return '<ul class="pm-list">' +
+        parts.map(function (l) { return '<li>' + h(l) + '</li>'; }).join('') +
+        '</ul>';
+    }
+    return '<p class="pm-desc-text">' + h(desc) + '</p>';
+  }
+
+  /* ── HTML escape ── */
   function h(s) {
     return String(s || '')
       .replace(/&/g, '&amp;').replace(/</g, '&lt;')

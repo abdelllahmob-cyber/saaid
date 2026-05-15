@@ -841,9 +841,9 @@ adjustNav();
   }
   GRID.insertAdjacentElement('afterbegin', skelWrap);
 
-  /* ── Fetch ── */
+  /* ── Fetch (4 صور لكل منتج) ── */
   sb.from('products')
-    .select('id, name, price, description, color, size, image_url')
+    .select('id, name, price, description, color, size, image_url, image_url2, image_url3, image_url4')
     .order('created_at', { ascending: false })
     .then(function (res) {
       var sk = document.getElementById('dbSkelWrap');
@@ -855,23 +855,36 @@ adjustNav();
       var badges = ['🆕 جديد', '⭐ مميز', '🔥 رائج', '✨ حصري'];
 
       var html = res.data.map(function (p, i) {
-        var safeId  = String(p.id).replace(/['"\\]/g, '');
-        var waMsg   = 'السلام عليكم، بغيت نشري ' + p.name + ' — الثمن: ' + p.price + ' درهم';
-        var waUrl   = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(waMsg);
-        var sub     = p.description
+        var safeId = String(p.id).replace(/['"\\]/g, '');
+        var gId    = 'db-g-' + safeId;
+        var waMsg  = 'السلام عليكم، بغيت نشري ' + p.name + ' — الثمن: ' + p.price + ' درهم';
+        var waUrl  = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(waMsg);
+        var sub    = p.description
           ? (p.description.length > 72 ? p.description.slice(0, 72) + '...' : p.description)
           : (p.color ? 'اللون: ' + p.color + (p.size ? ' | ' + p.size : '') : 'منتج جديد من متجرنا');
-        var imgBlock = p.image_url
-          ? '<img src="' + h(p.image_url) + '" class="active" alt="' + h(p.name) + '" loading="lazy"' +
-            ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
-            '<div class="g-ph" style="display:none"><i class="fa-solid fa-layer-group"></i>' +
-            '<span>' + h(p.name) + '</span></div>'
-          : '<div class="g-ph"><i class="fa-solid fa-layer-group"></i><span>' + h(p.name) + '</span></div>';
+
+        /* ── بناء الصور (فقط اللي مشي فارغة) ── */
+        var imgSrcs = [p.image_url, p.image_url2, p.image_url3, p.image_url4].filter(Boolean);
+        var imgsHtml = '';
+        if (imgSrcs.length) {
+          imgSrcs.forEach(function (src, j) {
+            imgsHtml += '<img src="' + h(src) + '"' +
+              (j === 0 ? ' class="active"' : '') +
+              ' alt="' + h(p.name) + '" loading="lazy"' +
+              ' onerror="this.style.display=\'none\'">';
+          });
+        } else {
+          imgsHtml = '<div class="g-ph"><i class="fa-solid fa-layer-group"></i>' +
+            '<span>' + h(p.name) + '</span></div>';
+        }
 
         return (
           '<div class="prod-card">' +
-            '<div class="gallery">' +
-              imgBlock +
+            '<div class="gallery" id="' + gId + '">' +
+              imgsHtml +
+              '<button class="g-arr g-arr-r" onclick="slideG(\'' + gId + '\',-1)">&#8249;</button>' +
+              '<button class="g-arr g-arr-l" onclick="slideG(\'' + gId + '\', 1)">&#8250;</button>' +
+              '<div class="g-dots" id="dots-' + gId + '"></div>' +
               '<div class="g-badge">' + badges[i % badges.length] + '</div>' +
               '<div class="g-ship">🚚 فابور</div>' +
             '</div>' +
@@ -898,6 +911,25 @@ adjustNav();
       }).join('');
 
       GRID.insertAdjacentHTML('afterbegin', html);
+
+      /* ── تهيئة الـ gallery لكل منتج بعد الإدراج في DOM ── */
+      res.data.forEach(function (p) {
+        var safeId = String(p.id).replace(/['"\\]/g, '');
+        var gId    = 'db-g-' + safeId;
+        var gallEl = document.getElementById(gId);
+        if (!gallEl) return;
+
+        var imgCount = gallEl.querySelectorAll('img').length;
+
+        if (imgCount >= 1) {
+          buildGallery(gId);                           /* dots + swipe */
+        }
+        if (imgCount <= 1) {
+          gallEl.querySelectorAll('.g-arr').forEach(function (a) {
+            a.style.display = 'none';                  /* أخبي الأسهم لصورة واحدة */
+          });
+        }
+      });
     });
 
   /* ══════════════════════════════════════════

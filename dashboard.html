@@ -313,8 +313,12 @@ var GATE_PASS = '2026';
 (function() {
   if (sessionStorage.getItem('merchant_auth') === '1') {
     document.getElementById('gateOverlay').classList.add('gone');
+  } else {
+    setTimeout(function(){
+      var inp = document.getElementById('gateInp');
+      if (inp) inp.focus();
+    }, 350);
   }
-  setTimeout(function(){ document.getElementById('gateInp').focus(); }, 300);
 })();
 
 function checkGate() {

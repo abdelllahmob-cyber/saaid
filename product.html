@@ -525,19 +525,22 @@ const PRODUCTS = {
 };
 
 /* ══════ STATE ══════ */
-let lang  = localStorage.getItem('lang') || 'ar';
-var rawId = new URLSearchParams(location.search).get('id');
-/* pid: integer للمنتجات الثابتة، string (UUID) للمنتجات من DB */
-let pid   = rawId ? (parseInt(rawId) || rawId) : 1;
-let curImg = 0;
+let lang    = localStorage.getItem('lang') || 'ar';
+var _params = new URLSearchParams(location.search);
+var rawId   = _params.get('id');
+var srcDb   = _params.get('src') === 'db';      /* true = جاي من Supabase */
+let pid     = rawId ? (parseInt(rawId) || rawId) : 1;
+let curImg  = 0;
 
 /* ══════ BOOT ══════ */
 window.addEventListener('DOMContentLoaded', function () {
   applyLang(lang, false);
-  if (PRODUCTS[pid]) {
-    loadProduct();        /* منتج ثابت */
-  } else {
-    fetchAndDisplayDBProduct(pid); /* منتج من Supabase */
+  /* srcDb = true  → دايما من Supabase (حتى لو pid كاين في PRODUCTS)
+     srcDb = false → فحص PRODUCTS أولاً (للمنتجات الثابتة 1-3)       */
+  if (!srcDb && PRODUCTS[pid]) {
+    loadProduct();
+  } else if (rawId) {
+    fetchAndDisplayDBProduct(rawId); /* نمرر rawId كـ string مباشرة */
   }
 });
 
@@ -639,22 +642,44 @@ function updateWaLink() {
 
 /* ══════ DB PRODUCT — جلب وعرض منتج من Supabase ══════ */
 async function fetchAndDisplayDBProduct(productId) {
-  /* حالة تحميل */
-  document.getElementById('prodName').textContent = '...';
-  document.getElementById('gPhTxt').textContent   = '...';
-  document.getElementById('gPh').style.display    = 'flex';
+  document.getElementById('prodName').textContent  = '...';
+  document.getElementById('gPhTxt').textContent    = '...';
+  document.getElementById('gPh').style.display     = 'flex';
   document.getElementById('mainImg').style.display = 'none';
 
+  /* حاول تعرف هل ID رقم أو string */
+  var qId = productId;
+  var asInt = parseInt(productId, 10);
+  if (!isNaN(asInt) && String(asInt) === String(productId)) qId = asInt;
+
   try {
-    var res = await _db.from('products').select('*').eq('id', productId).maybeSingle();
-    if (res.error || !res.data) {
+    var res = await _db
+      .from('products')
+      .select('id, name, price, description, color, size, image_url, image_url2, image_url3, image_url4')
+      .eq('id', qId)
+      .limit(1);
+
+    /* تسجيل في الكونسول للديباغ */
+    console.log('[DB] id queried:', qId, '| result:', res);
+
+    if (res.error) {
+      console.error('[DB] Supabase error:', res.error);
+      document.getElementById('prodName').textContent =
+        lang === 'ar' ? 'خطأ في تحميل المنتج' : 'Erreur de chargement';
+      return;
+    }
+
+    if (!res.data || !res.data.length) {
       document.getElementById('prodName').textContent =
         lang === 'ar' ? 'المنتج غير موجود' : 'Produit introuvable';
       return;
     }
-    displayDBProduct(res.data);
+
+    displayDBProduct(res.data[0]);
   } catch (err) {
-    console.error('DB error:', err);
+    console.error('[DB] JS error:', err);
+    document.getElementById('prodName').textContent =
+      lang === 'ar' ? 'خطأ في الاتصال' : 'Erreur de connexion';
   }
 }
 

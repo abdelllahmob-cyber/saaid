@@ -54,6 +54,9 @@ nav{position:fixed;top:36px;left:0;right:0;z-index:300;background:rgba(255,255,2
 .mobile-menu a:hover{background:var(--primary-light);color:var(--primary)}
 .mobile-menu .m-wa{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--whatsapp),var(--whatsapp-dark));color:#fff!important;padding:13px!important;border-radius:12px!important;font-size:14px!important;margin-top:8px}
 .mobile-menu .m-lang{display:flex;align-items:center;justify-content:center;background:var(--primary-light);color:var(--primary);padding:11px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;margin-top:6px;border:none;width:100%;font-family:'Cairo',sans-serif}
+.mobile-menu .m-merchant{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(212,175,55,.18),rgba(212,175,55,.08));border:1.5px solid rgba(212,175,55,.6);color:var(--primary-dark);padding:13px;border-radius:12px;font-size:14px;font-weight:800;text-decoration:none;margin-top:6px;transition:all .2s}
+.mobile-menu .m-merchant:hover{background:linear-gradient(135deg,rgba(212,175,55,.32),rgba(212,175,55,.18));border-color:#d4af37}
+.mobile-menu .m-merchant i{color:#b8941e;font-size:15px}
 
 /* PAGE */
 .page{padding-top:98px}
@@ -346,8 +349,8 @@ html[dir="ltr"] .nav-logo{margin-right:0}
   <button class="m-lang" onclick="toggleLang();closeMenu()">
     <span id="mobileLangLabel">🇫🇷 Français</span>
   </button>
-  <a href="dashboard.html" onclick="closeMenu()" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(212,175,55,.15);border:1.5px solid rgba(212,175,55,.5);color:var(--primary-dark);padding:11px;border-radius:10px;font-size:14px;font-weight:800;text-decoration:none;margin-top:6px">
-    <i class="fa-solid fa-store-slash" style="color:#b8941e"></i> دخول التجار
+  <a href="dashboard.html" class="m-merchant" onclick="closeMenu()">
+    <i class="fa-solid fa-store"></i> دخول التجار
   </a>
 </div>
 

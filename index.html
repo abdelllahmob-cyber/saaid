@@ -309,6 +309,8 @@ html[dir="ltr"] .nav-logo{margin-right:0}
 .om-field label{display:block;font-size:13.5px;font-weight:800;color:var(--text);margin-bottom:7px}
 .om-field input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:14px;color:var(--text);background:#fafafa;transition:border-color .2s;outline:none}
 .om-field input:focus{border-color:var(--primary);background:#fff}
+.om-field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:14px;color:var(--text);background:#fafafa;transition:border-color .2s;outline:none;resize:vertical;min-height:80px}
+.om-field textarea:focus{border-color:var(--primary);background:#fff}
 .om-submit{width:100%;padding:14px;margin-top:8px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .22s;box-shadow:0 4px 16px rgba(107,66,38,.3)}
 .om-submit:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(107,66,38,.4)}
 .om-submit:disabled{opacity:.7;cursor:not-allowed;transform:none}
@@ -661,6 +663,10 @@ html[dir="ltr"] .nav-logo{margin-right:0}
         <label for="omCity">المدينة</label>
         <input type="text" id="omCity" placeholder="أدخل مدينتك" required>
       </div>
+      <div class="om-field">
+        <label for="omAddress">العنوان الكامل</label>
+        <textarea id="omAddress" placeholder="الشارع، الرقم، الحي..." required></textarea>
+      </div>
       <button type="submit" class="om-submit">
         <i class="fa-solid fa-paper-plane"></i> تأكيد الطلب
       </button>
@@ -867,8 +873,8 @@ adjustNav();
    SUPABASE — تحميل المنتجات + Details Modal
 ══════════════════════════════════════════════════ */
 (function () {
-  var SB_URL = 'https://bylisjawltitosfbtwzw.supabase.co';
-  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bGlzamF3bHRpdG9zZmJ0d3p3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NTYwNzEsImV4cCI6MjA5NDQzMjA3MX0.aRq9q5qV8_0lwiv5rQQRaHcb7GdBBjNmxcOtV1mfvdE';
+  var SB_URL = 'https://jpczouzgfgzzsxnjqpvg.supabase.co';
+  var SB_KEY = 'sb_publishable_DQ3SyeeV_h9cpg334uC0oQ_d2UWEMMu';
   var sb  = window.supabase.createClient(SB_URL, SB_KEY);
   var WA  = '212771263305';
   var GRID = document.getElementById('productsGrid');
@@ -1090,27 +1096,48 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeOrderModal();
 });
 
+var WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzjuFZNLHvOUgAF4JHgjS3AlsqzDiHhnmgjmD-kSL4DncuHWjLy23lzzp5zEDzXH9RspQ/exec';
+
 window.submitOrder = function(e) {
   e.preventDefault();
-  var name  = document.getElementById('omName').value.trim();
-  var phone = document.getElementById('omPhone').value.trim();
-  var city  = document.getElementById('omCity').value.trim();
-  var btn   = document.querySelector('.om-submit');
+  var name    = document.getElementById('omName').value.trim();
+  var phone   = document.getElementById('omPhone').value.trim();
+  var city    = document.getElementById('omCity').value.trim();
+  var address = document.getElementById('omAddress').value.trim();
+  var btn     = document.querySelector('.om-submit');
 
   btn.disabled = true;
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الإرسال...';
 
-  var SB_URL = 'https://bylisjawltitosfbtwzw.supabase.co';
-  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bGlzamF3bHRpdG9zZmJ0d3p3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NTYwNzEsImV4cCI6MjA5NDQzMjA3MX0.aRq9q5qV8_0lwiv5rQQRaHcb7GdBBjNmxcOtV1mfvdE';
+  var SB_URL = 'https://jpczouzgfgzzsxnjqpvg.supabase.co';
+  var SB_KEY = 'sb_publishable_DQ3SyeeV_h9cpg334uC0oQ_d2UWEMMu';
   var sb = window.supabase.createClient(SB_URL, SB_KEY);
 
+  var orderData = {
+    name:    name,
+    phone:   phone,
+    city:    city,
+    address: address,
+    product: _orderProduct.name,
+    price:   _orderProduct.price
+  };
+
+  /* إرسال لـ Google Sheets */
+  fetch(WEBHOOK_URL, {
+    method:  'POST',
+    headers: {'Content-Type': 'application/json'},
+    body:    JSON.stringify(orderData)
+  }).catch(function() {});
+
+  /* حفظ في Supabase */
   sb.from('orders').insert([{
     customer_name: name,
-    phone: phone,
-    city: city,
-    product_name: _orderProduct.name,
-    price: _orderProduct.price,
-    status: 'pending'
+    phone:         phone,
+    city:          city,
+    address:       address,
+    product_name:  _orderProduct.name,
+    price:         _orderProduct.price,
+    status:        'pending'
   }]).then(function(res) {
     if (res.error) console.warn('Order error:', res.error.message);
     window.location.href = 'thank-you.html';

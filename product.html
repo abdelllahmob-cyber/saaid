@@ -764,11 +764,12 @@ async function handleOrderSubmit(e) {
       body:    JSON.stringify(orderData)
     });
 
-    document.getElementById('checkoutForm').style.display    = 'none';
-    document.getElementById('checkoutSuccess').style.display = 'block';
     console.log('Order submitted to Google Sheets:', orderData);
 
-    setTimeout(function () { closeCheckout(); }, 4000);
+    // ✅ رديريكت لصفحة الشكر بعد 800ms
+    setTimeout(function () {
+      window.location.href = 'thank-you.html';
+    }, 800);
 
   } catch (error) {
     msg.className   = 'f-msg err';

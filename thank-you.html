@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>شكراً على طلبك — متجر الرفوف العصرية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- ══════════════════════════════════════════════
+     ✅ Facebook Pixel — ضع Pixel ID ديالك هنا
+     ══════════════════════════════════════════════ -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+
+// ⚠️ بدل XXXXXXXXXXXXXXX بـ Pixel ID ديالك (أرقام فقط)
+fbq('init', 'XXXXXXXXXXXXXXX');
+fbq('track', 'PageView');
+
+// 🎯 حدث الشراء — هادشي اللي كيعرف فيه فيسبوك أن واحد دار طلب
+fbq('track', 'Purchase', {
+  currency: 'MAD',
+  value: 0
+});
+</script>
+<noscript>
+<img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXX&ev=Purchase&noscript=1"/>
+</noscript>
+<!-- ══ نهاية Facebook Pixel ══ -->
+
+<style>
+:root{
+  --primary:#8B5E3C;--primary-dark:#6B4226;--primary-light:#F5E6D3;
+  --accent:#C8956A;--accent2:#d4af37;
+  --text:#2C1810;--text-light:#7A6555;
+  --white:#fff;--bg:#FAF7F3;--card-bg:#fff;--border:#E0D3C5;
+  --whatsapp:#25d366;--whatsapp-dark:#128c7e;
+  --shadow:0 4px 24px rgba(107,66,38,.10);--shadow-lg:0 8px 48px rgba(107,66,38,.18);
+  --radius:16px;--radius-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);box-shadow:var(--shadow);padding:0 16px}
+.nav-inner{max-width:1100px;margin:0 auto;height:62px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0}
+.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.logo-text .brand{font-size:15px;font-weight:900;color:var(--primary-dark);line-height:1.2}
+.logo-text .sub{font-size:10.5px;color:var(--text-light);font-weight:500}
+.nav-wa{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--whatsapp),var(--whatsapp-dark));color:#fff;padding:8px 16px;border-radius:22px;font-size:13px;font-weight:800;text-decoration:none;transition:all .2s;white-space:nowrap}
+.nav-wa:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(37,211,102,.45)}
+.nav-wa i{font-size:16px}
+
+/* ── PAGE ── */
+.page{padding-top:62px}
+
+/* ── THANK YOU HERO ── */
+.ty-hero{background:linear-gradient(135deg,#1a6b3a 0%,#22c55e 60%,#4ade80 100%);position:relative;overflow:hidden;padding:60px 20px 68px;text-align:center}
+.ty-hero::before{content:'';position:absolute;width:340px;height:340px;background:radial-gradient(circle,rgba(255,255,255,.09),transparent 70%);border-radius:50%;top:-80px;right:-80px}
+.ty-hero::after{content:'';position:absolute;width:260px;height:260px;background:radial-gradient(circle,rgba(255,255,255,.07),transparent 70%);border-radius:50%;bottom:-60px;left:-60px}
+.ty-inner{max-width:620px;margin:0 auto;position:relative;z-index:2}
+
+/* Checkmark animation */
+.ty-check{width:88px;height:88px;background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.5);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;animation:checkPop .5s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes checkPop{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+.ty-check i{font-size:38px;color:#fff}
+
+.ty-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 18px;border-radius:20px;font-size:12.5px;font-weight:700;margin-bottom:18px;backdrop-filter:blur(8px)}
+.ty-hero h1{color:#fff;font-size:clamp(22px,5.5vw,36px);font-weight:900;line-height:1.3;margin-bottom:12px}
+.ty-hero p{color:rgba(255,255,255,.88);font-size:14.5px;line-height:1.75;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto}
+
+.ty-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-wa-big{display:inline-flex;align-items:center;gap:9px;background:#fff;color:var(--whatsapp-dark);padding:13px 26px;border-radius:12px;font-size:15px;font-weight:900;text-decoration:none;box-shadow:0 4px 18px rgba(0,0,0,.18);transition:all .25s}
+.btn-wa-big:hover{transform:translateY(-3px);box-shadow:0 7px 24px rgba(0,0,0,.22)}
+.btn-wa-big i{font-size:20px;color:var(--whatsapp)}
+.btn-scroll{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.5);color:#fff;padding:13px 22px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;backdrop-filter:blur(8px);transition:all .25s;cursor:pointer}
+.btn-scroll:hover{background:rgba(255,255,255,.28);transform:translateY(-3px)}
+
+/* Confetti dots decoration */
+.ty-dots{display:flex;justify-content:center;gap:8px;margin-top:28px}
+.ty-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4)}
+.ty-dot:nth-child(2){background:rgba(255,255,255,.7);width:10px;height:10px}
+.ty-dot:nth-child(3){background:rgba(255,255,255,.4)}
+
+/* ── SECTION ── */
+section{padding:72px 20px}
+.sec-header{text-align:center;margin-bottom:44px}
+.sec-tag{display:inline-flex;align-items:center;gap:7px;background:var(--primary-light);color:var(--primary);padding:5px 16px;border-radius:20px;font-size:12.5px;font-weight:700;margin-bottom:14px}
+.sec-title{font-size:clamp(20px,4vw,30px);font-weight:900;color:var(--text);margin-bottom:10px}
+.sec-sub{font-size:14px;color:var(--text-light);line-height:1.7;max-width:520px;margin:0 auto}
+
+/* ── PRODUCTS ── */
+#more-products{background:var(--bg)}
+.products-grid{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px}
+
+/* Product Card */
+.prod-card{background:var(--card-bg);border:1.5px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s;position:relative}
+.prod-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));opacity:0;transition:opacity .3s}
+.prod-card:hover::before{opacity:1}
+
+/* Gallery */
+.gallery{position:relative;width:100%;aspect-ratio:1/1;background:var(--primary-light);overflow:hidden}
+.gallery img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
+.gallery img.active{opacity:1}
+.g-badge{position:absolute;top:12px;right:12px;z-index:4;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.g-ship{position:absolute;top:12px;left:12px;z-index:4;background:var(--whatsapp);color:#fff;padding:4px 9px;border-radius:20px;font-size:10px;font-weight:800}
+.g-arr{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.88);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--primary);box-shadow:0 2px 10px rgba(0,0,0,.18);transition:.2s;line-height:1}
+.g-arr:hover{background:var(--primary);color:#fff}
+.g-arr-r{right:10px}
+.g-arr-l{left:10px}
+.g-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:4}
+.g-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);border:none;cursor:pointer;padding:0;transition:.2s}
+.g-dot.on{background:#fff;width:18px;border-radius:4px}
+
+/* Card Body */
+.card-body{padding:18px}
+.card-name{font-size:16px;font-weight:900;color:var(--text);line-height:1.4;margin-bottom:5px}
+.card-sub{font-size:12.5px;color:var(--text-light);margin-bottom:14px;line-height:1.5}
+.price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}
+.price{font-size:30px;font-weight:900;color:var(--primary);line-height:1}
+.price small{font-size:13px;font-weight:600;color:var(--text-light)}
+.stars-wrap{display:flex;align-items:center;gap:4px;background:#fff8e1;border:1px solid #f0d070;padding:4px 10px;border-radius:20px}
+.stars{font-size:11.5px;color:#f0b429}
+.stars-val{font-size:12px;font-weight:800;color:#8a6800}
+
+/* Buttons */
+.order-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:14px;margin-top:10px;background:linear-gradient(135deg,var(--whatsapp),var(--whatsapp-dark));color:#fff;text-decoration:none;border:none;border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:15px;font-weight:800;box-shadow:0 4px 16px rgba(37,211,102,.35);transition:all .22s;cursor:pointer}
+.order-btn:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(37,211,102,.45)}
+.details-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;margin-top:8px;background:transparent;border:1.5px solid var(--primary);color:var(--primary);border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:14px;font-weight:800;text-decoration:none;transition:all .22s}
+.details-btn:hover{background:var(--primary-light)}
+
+/* ── FOOTER ── */
+footer{background:var(--primary-dark);padding:32px 20px 20px}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;margin-bottom:28px}
+.f-brand .logo-icon2{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--primary));border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;margin-bottom:12px}
+.brand2{color:#fff;font-size:16px;font-weight:900}
+.f-brand p{color:rgba(255,255,255,.7);font-size:13px;line-height:1.7;margin-top:8px;max-width:260px}
+.f-title{color:var(--accent);font-size:13.5px;font-weight:800;margin-bottom:14px}
+.f-links{list-style:none}
+.f-links li{margin-bottom:8px}
+.f-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;transition:color .2s;display:flex;align-items:center;gap:6px}
+.f-links a:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;max-width:1100px;margin:0 auto}
+.footer-bottom p{color:rgba(255,255,255,.55);font-size:12px}
+.social-links{display:flex;gap:8px}
+.social-links a{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-size:15px;transition:all .2s;text-decoration:none}
+.social-links a:hover{background:var(--accent);color:#fff;transform:translateY(-2px)}
+
+/* ── FLOAT WA ── */
+.wa-float{position:fixed;bottom:24px;left:20px;z-index:999}
+.wa-float a{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--whatsapp),var(--whatsapp-dark));color:#fff;padding:10px 17px;border-radius:50px;text-decoration:none;font-family:'Cairo',sans-serif;font-size:13px;font-weight:800;box-shadow:0 4px 20px rgba(37,211,102,.45);animation:waPulse 2.2s infinite;transition:transform .25s}
+.wa-float a:hover{transform:scale(1.05)}
+.wa-float svg{width:19px;height:19px;fill:#fff;flex-shrink:0}
+@keyframes waPulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.45)}50%{box-shadow:0 4px 32px rgba(37,211,102,.72)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){.footer-inner{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){section{padding:56px 16px}.products-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;text-align:center}.ty-hero{padding:52px 16px 60px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon"><i class="fa-solid fa-layer-group"></i></div>
+      <div class="logo-text">
+        <div class="brand">متجر الرفوف العصرية</div>
+        <div class="sub">خشب MDF • مودرن • أنيق</div>
+      </div>
+    </a>
+    <a href="https://wa.me/212771263305" class="nav-wa" target="_blank">
+      <i class="fa-brands fa-whatsapp"></i> تواصل معنا
+    </a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ══ THANK YOU HERO ══ -->
+<section class="ty-hero">
+  <div class="ty-inner">
+    <div class="ty-check"><i class="fa-solid fa-check"></i></div>
+    <div class="ty-badge"><i class="fa-solid fa-circle-check"></i> تم استلام طلبك</div>
+    <h1>شكراً على ثقتك بنا! 🎉</h1>
+    <p>
+      تم إرسال طلبكم بنجاح ✅<br>
+      سنتواصل معكم <strong style="color:#fff">في الحال</strong> لتأكيد الطلب وتحديد موعد التوصيل
+    </p>
+    <div class="ty-btns">
+      <a href="https://wa.me/212771263305?text=السلام عليكم، أود الاستفسار عن طلبي" class="btn-wa-big" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        تواصل معنا على واتساب
+      </a>
+      <a href="#more-products" class="btn-scroll">
+        <i class="fa-solid fa-arrow-down"></i>
+        تعرف على المزيد
+      </a>
+    </div>
+    <div class="ty-dots">
+      <div class="ty-dot"></div>
+      <div class="ty-dot"></div>
+      <div class="ty-dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MORE PRODUCTS ══ -->
+<section id="more-products">
+  <div class="sec-header">
+    <div class="sec-tag"><i class="fa-solid fa-fire"></i> اكتشف المزيد</div>
+    <h2 class="sec-title">منتجات قد تعجبك أيضاً</h2>
+    <p class="sec-sub">جميع منتجاتنا من خشب MDF عالي الجودة مع توصيل مجاني لجميع مدن المغرب</p>
+  </div>
+  <div class="products-grid">
+
+    <!-- PRODUCT 1 -->
+    <div class="prod-card">
+      <div class="gallery" id="g1">
+        <img src="images/product1/dims_p1.jpeg" class="active" alt="رف جداري صغير">
+        <img src="images/product1/white.jpeg"   alt="">
+        <img src="images/product1/Gray.jpeg"    alt="">
+        <img src="images/product1/p1_2.jpg"     alt="">
+        <button class="g-arr g-arr-r" onclick="slideG('g1',-1)">&#8249;</button>
+        <button class="g-arr g-arr-l" onclick="slideG('g1', 1)">&#8250;</button>
+        <div class="g-dots" id="dots-g1"></div>
+        <div class="g-badge">🆕 جديد</div>
+        <div class="g-ship">🚚 فابور</div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">رف جداري عصري صغير — خشب MDF</div>
+        <div class="card-sub">مثالي للمطبخ، الصالون أو أي مساحة داخل المنزل</div>
+        <div class="price-row">
+          <div class="price">180 <small>درهم</small></div>
+          <div class="stars-wrap"><span class="stars">★★★★★</span><span class="stars-val">5.0</span></div>
+        </div>
+        <a href="https://wa.me/212771263305?text=السلام عليكم، بغيت نطلب الرف الجداري الصغير (180 درهم)" class="order-btn" target="_blank">
+          <i class="fa-brands fa-whatsapp" style="font-size:19px"></i>
+          اطلب الآن
+        </a>
+        <a href="product.html?id=1" class="details-btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          عرض التفاصيل
+        </a>
+      </div>
+    </div>
+
+    <!-- PRODUCT 2 -->
+    <div class="prod-card">
+      <div class="gallery" id="g2">
+        <img src="images/product2/dims_p2.jpeg" class="active" alt="رفوف جدارية كبيرة">
+        <img src="images/product2/p2_oak.jpg"   alt="">
+        <img src="images/product2/p2_gray.jpg"  alt="">
+        <img src="images/product2/p2_white.jpg" alt="">
+        <button class="g-arr g-arr-r" onclick="slideG('g2',-1)">&#8249;</button>
+        <button class="g-arr g-arr-l" onclick="slideG('g2', 1)">&#8250;</button>
+        <div class="g-dots" id="dots-g2"></div>
+        <div class="g-badge">⭐ الأكثر مبيعاً</div>
+        <div class="g-ship">🚚 فابور</div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">رفوف جدارية عصرية كبيرة — خشب MDF</div>
+        <div class="card-sub">مثالية للحمام، الصالون، غرفة النوم أو المكتب</div>
+        <div class="price-row">
+          <div class="price">219 <small>درهم</small></div>
+          <div class="stars-wrap"><span class="stars">★★★★★</span><span class="stars-val">5.0</span></div>
+        </div>
+        <a href="https://wa.me/212771263305?text=السلام عليكم، بغيت نطلب الرفوف الجدارية الكبيرة (219 درهم)" class="order-btn" target="_blank">
+          <i class="fa-brands fa-whatsapp" style="font-size:19px"></i>
+          اطلب الآن
+        </a>
+        <a href="product.html?id=2" class="details-btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          عرض التفاصيل
+        </a>
+      </div>
+    </div>
+
+    <!-- PRODUCT 3 -->
+    <div class="prod-card">
+      <div class="gallery" id="g3">
+        <img src="images/product3/ccc1.jpeg" class="active" alt="كوافوز Smart RIDKA">
+        <img src="images/product3/CCC2.jpeg" alt="">
+        <img src="images/product3/CCC3.jpeg" alt="">
+        <img src="images/product3/CCC4.jpeg" alt="">
+        <button class="g-arr g-arr-r" onclick="slideG('g3',-1)">&#8249;</button>
+        <button class="g-arr g-arr-l" onclick="slideG('g3', 1)">&#8250;</button>
+        <div class="g-dots" id="dots-g3"></div>
+        <div class="g-badge">🔒 ذكي</div>
+        <div class="g-ship">🚚 فابور</div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">كوافوز Smart RIDKA — خشب MDF بقفل RFID</div>
+        <div class="card-sub">أمان وتقنية في قطعة أثاث واحدة لغرفة النوم</div>
+        <div class="price-row">
+          <div class="price">849 <small>درهم</small></div>
+          <div class="stars-wrap"><span class="stars">★★★★★</span><span class="stars-val">5.0</span></div>
+        </div>
+        <a href="https://wa.me/212771263305?text=السلام عليكم، بغيت نطلب كوافوز Smart RIDKA (849 درهم)" class="order-btn" target="_blank">
+          <i class="fa-brands fa-whatsapp" style="font-size:19px"></i>
+          اطلب الآن
+        </a>
+        <a href="product.html?id=3" class="details-btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          عرض التفاصيل
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="f-brand">
+      <div class="logo-icon2"><i class="fa-solid fa-layer-group"></i></div>
+      <div class="brand2">متجر الرفوف العصرية</div>
+      <p>رفوف جدارية من خشب MDF بتصميمات مودرن وأنيقة تناسب كل ديكور. توصيل مجاني لجميع مدن المغرب.</p>
+    </div>
+    <div>
+      <div class="f-title">روابط سريعة</div>
+      <ul class="f-links">
+        <li><a href="index.html#products"><i class="fa-solid fa-chevron-left"></i> المنتجات</a></li>
+        <li><a href="index.html#why"><i class="fa-solid fa-chevron-left"></i> مميزاتنا</a></li>
+        <li><a href="index.html#reviews"><i class="fa-solid fa-chevron-left"></i> آراء الزبناء</a></li>
+        <li><a href="index.html#contact"><i class="fa-solid fa-chevron-left"></i> تواصل معنا</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-title">تواصل</div>
+      <ul class="f-links">
+        <li><a href="https://wa.me/212771263305" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a></li>
+        <li><a href="https://maps.app.goo.gl/LfJmZKLM7HY4aM8y5" target="_blank"><i class="fa-solid fa-location-dot"></i> موقعنا</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 متجر الرفوف العصرية</p>
+    <div class="social-links">
+      <a href="https://wa.me/212771263305" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING WA -->
+<div class="wa-float">
+  <a href="https://wa.me/212771263305" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    تواصل معنا
+  </a>
+</div>
+
+<script>
+/* ── Gallery Slider ── */
+function slideG(id, dir) {
+  var gal = document.getElementById(id);
+  var imgs = gal.querySelectorAll('img');
+  var dots = document.querySelectorAll('#dots-' + id + ' .g-dot');
+  var cur = 0;
+  imgs.forEach(function(img, i) { if (img.classList.contains('active')) cur = i; });
+  imgs[cur].classList.remove('active');
+  if (dots[cur]) dots[cur].classList.remove('on');
+  cur = (cur + dir + imgs.length) % imgs.length;
+  imgs[cur].classList.add('active');
+  if (dots[cur]) dots[cur].classList.add('on');
+}
+
+/* ── Build dots for each gallery ── */
+['g1','g2','g3'].forEach(function(id) {
+  var gal  = document.getElementById(id);
+  var imgs = gal.querySelectorAll('img');
+  var wrap = document.getElementById('dots-' + id);
+  imgs.forEach(function(_, i) {
+    var d = document.createElement('button');
+    d.className = 'g-dot' + (i === 0 ? ' on' : '');
+    d.onclick = function() {
+      var allImgs = gal.querySelectorAll('img');
+      var allDots = wrap.querySelectorAll('.g-dot');
+      allImgs.forEach(function(img) { img.classList.remove('active'); });
+      allDots.forEach(function(dot) { dot.classList.remove('on'); });
+      allImgs[i].classList.add('active');
+      d.classList.add('on');
+    };
+    wrap.appendChild(d);
+  });
+});
+</script>
+
+</body>
+</html>

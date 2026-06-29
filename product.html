@@ -1028,6 +1028,36 @@ function share() {
 var _SB_URL = 'https://jpczouzgfgzzsxnjqpvg.supabase.co';
 var _SB_KEY = 'sb_publishable_DQ3SyeeV_h9cpg334uC0oQ_d2UWEMMu';
 var _db = window.supabase.createClient(_SB_URL, _SB_KEY);
+var LOCAL_PRODUCTS_KEY = 'merchant_products';
+
+function getLocalProducts() {
+  try {
+    var raw = localStorage.getItem(LOCAL_PRODUCTS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveLocalProducts(list) {
+  try {
+    localStorage.setItem(LOCAL_PRODUCTS_KEY, JSON.stringify(list));
+  } catch (e) {}
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise(function (resolve, reject) {
+    if (!file) return resolve(null);
+    var reader = new FileReader();
+    reader.onload = function () { resolve(reader.result); };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function makeLocalId() {
+  return 'local-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+}
 
 /* Open admin modal when ?admin=1 — requires merchant auth */
 (function () {
@@ -1115,16 +1145,23 @@ async function submitProduct(e) {
   var uploaded = [null, null, null, null];
   var total    = files.filter(Boolean).length;
   var done     = 0;
+  var useLocalFallback = false;
 
   async function uploadOne(file, idx) {
     if (!file) return;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> رفع الصورة ' + (done + 1) + '/' + total + '...';
-    var ext  = file.name.split('.').pop().toLowerCase();
-    var path = Date.now() + '-' + Math.random().toString(36).slice(2) + '-' + (idx + 1) + '.' + ext;
-    var res  = await _db.storage.from('products').upload(path, file, { cacheControl: '3600', upsert: false });
-    if (res.error) throw res.error;
-    uploaded[idx] = _db.storage.from('products').getPublicUrl(path).data.publicUrl;
-    done++;
+    try {
+      var ext  = file.name.split('.').pop().toLowerCase();
+      var path = Date.now() + '-' + Math.random().toString(36).slice(2) + '-' + (idx + 1) + '.' + ext;
+      var res  = await _db.storage.from('products').upload(path, file, { cacheControl: '3600', upsert: false });
+      if (res.error) throw res.error;
+      uploaded[idx] = _db.storage.from('products').getPublicUrl(path).data.publicUrl;
+      done++;
+    } catch (err) {
+      useLocalFallback = true;
+      uploaded[idx] = await readFileAsDataUrl(file);
+      done++;
+    }
   }
 
   try {
@@ -1141,6 +1178,20 @@ async function submitProduct(e) {
     if (color) row.color       = color;
     if (size)  row.size        = size;
 
+    if (useLocalFallback || !_db || !_db.from) {
+      row.id = makeLocalId();
+      row.created_at = new Date().toISOString();
+      var existing = getLocalProducts();
+      saveLocalProducts([row].concat(existing));
+      msg.className = 'f-msg ok';
+      msg.textContent = '✅ تم حفظ المنتج بنجاح محلياً (الخدمة الخارجية غير متاحة)';
+      msg.style.display = 'block';
+      e.target.reset();
+      [1, 2, 3, 4].forEach(function (n) { clearSlot(n); });
+      setTimeout(function () { closeAdminModal(); window.location.href = 'dashboard.html'; }, 1800);
+      return;
+    }
+
     var dbRes = await _db.from('products').insert(row);
     if (dbRes.error) throw dbRes.error;
 
@@ -1149,7 +1200,7 @@ async function submitProduct(e) {
     msg.style.display = 'block';
     e.target.reset();
     [1, 2, 3, 4].forEach(function (n) { clearSlot(n); });
-    setTimeout(function () { closeAdminModal(); window.location.href = 'dashboard.html'; }, 2000);
+    setTimeout(function () { closeAdminModal(); window.location.href = 'dashboard.html'; }, 1800);
 
   } catch (err) {
     msg.className = 'f-msg err';

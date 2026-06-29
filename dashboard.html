@@ -379,25 +379,51 @@ var db = window.supabase.createClient(SB_URL, SB_KEY);
 
 var allProducts   = [];
 var pendingDelete = null; // { id, imagePath, name }
+var LOCAL_PRODUCTS_KEY = 'merchant_products';
+
+function getLocalProducts() {
+  try {
+    var raw = localStorage.getItem(LOCAL_PRODUCTS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveLocalProducts(list) {
+  try {
+    localStorage.setItem(LOCAL_PRODUCTS_KEY, JSON.stringify(list));
+  } catch (e) {}
+}
 
 /* ══════════════════════════════════════════
    LOAD ALL PRODUCTS
 ══════════════════════════════════════════ */
 async function loadProducts() {
   try {
+    if (!db || !db.from) throw new Error('Supabase غير متاح');
     var res = await db.from('products').select('*').order('created_at', { ascending: false });
     if (res.error) throw res.error;
     allProducts = res.data || [];
+    if (allProducts.length) saveLocalProducts(allProducts);
     updateStats();
     filterProducts();
   } catch (err) {
-    showToast('❌ فشل تحميل المنتجات: ' + err.message, 'err');
-    document.getElementById('productsGrid').innerHTML =
-      '<div class="empty-state">' +
-      '<div class="empty-ico"><i class="fa-solid fa-circle-exclamation" style="color:#dc2626"></i></div>' +
-      '<div class="empty-ttl">خطأ في الاتصال</div>' +
-      '<div class="empty-sub">' + esc(err.message) + '</div>' +
-      '</div>';
+    var localProducts = getLocalProducts();
+    if (localProducts.length) {
+      allProducts = localProducts;
+      updateStats();
+      filterProducts();
+      showToast('⚠️ تم تحميل المنتجات من التخزين المحلي', 'ok');
+    } else {
+      showToast('❌ فشل تحميل المنتجات: ' + err.message, 'err');
+      document.getElementById('productsGrid').innerHTML =
+        '<div class="empty-state">' +
+        '<div class="empty-ico"><i class="fa-solid fa-circle-exclamation" style="color:#dc2626"></i></div>' +
+        '<div class="empty-ttl">خطأ في الاتصال</div>' +
+        '<div class="empty-sub">' + esc(err.message) + '</div>' +
+        '</div>';
+    }
   }
 }
 
@@ -523,10 +549,16 @@ async function confirmDelete() {
     }
 
     /* 2 — Delete row from DB */
-    var dbRes = await db.from('products').delete().eq('id', id);
-    if (dbRes.error) throw dbRes.error;
+    try {
+      var dbRes = await db.from('products').delete().eq('id', id);
+      if (dbRes.error) throw dbRes.error;
+    } catch (dbErr) {
+      console.warn('Delete fallback:', dbErr.message);
+    }
 
     /* 3 — Update local list */
+    var localProducts = getLocalProducts().filter(function(p){ return String(p.id) !== String(id); });
+    saveLocalProducts(localProducts);
     allProducts = allProducts.filter(function(p){ return String(p.id) !== String(id); });
     updateStats();
     filterProducts();

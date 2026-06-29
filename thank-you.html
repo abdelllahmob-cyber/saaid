@@ -11,11 +11,11 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1874659336540837');
+fbq('init', '1539816741079245');
 fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1874659336540837&ev=PageView&noscript=1"
+src="https://www.facebook.com/tr?id=1539816741079245&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
 <meta charset="UTF-8">
@@ -25,33 +25,16 @@ src="https://www.facebook.com/tr?id=1874659336540837&ev=PageView&noscript=1"
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <!-- ══════════════════════════════════════════════
-     ✅ Facebook Pixel — ضع Pixel ID ديالك هنا
+     ✅ Facebook Pixel — حدث الشراء (Purchase Event)
      ══════════════════════════════════════════════ -->
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-
-// ⚠️ بدل XXXXXXXXXXXXXXX بـ Pixel ID ديالك (أرقام فقط)
-fbq('init', 'XXXXXXXXXXXXXXX');
-fbq('track', 'PageView');
-
 // 🎯 حدث الشراء — هادشي اللي كيعرف فيه فيسبوك أن واحد دار طلب
 fbq('track', 'Purchase', {
   currency: 'MAD',
   value: 0
 });
 </script>
-<noscript>
-<img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXX&ev=Purchase&noscript=1"/>
-</noscript>
-<!-- ══ نهاية Facebook Pixel ══ -->
+<!-- ══ نهاية Facebook Pixel Purchase Event ══ -->
 
 <style>
 :root{

@@ -801,6 +801,20 @@ async function handleOrderSubmit(e) {
 }
 
 /* ══════ DB PRODUCT — جلب وعرض منتج من Supabase ══════ */
+function getLocalProducts() {
+  try {
+    var raw = localStorage.getItem('merchant_products');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function getLocalProductById(productId) {
+  var products = getLocalProducts();
+  return products.find(function (p) { return String(p.id) === String(productId); }) || null;
+}
+
 async function fetchAndDisplayDBProduct(productId) {
   document.getElementById('prodName').textContent  = '...';
   document.getElementById('gPhTxt').textContent    = '...';
@@ -830,6 +844,11 @@ async function fetchAndDisplayDBProduct(productId) {
     }
 
     if (!res.data || !res.data.length) {
+      var localProduct = getLocalProductById(productId);
+      if (localProduct) {
+        displayDBProduct(localProduct);
+        return;
+      }
       document.getElementById('prodName').textContent =
         lang === 'ar' ? 'المنتج غير موجود' : 'Produit introuvable';
       return;
@@ -837,6 +856,11 @@ async function fetchAndDisplayDBProduct(productId) {
 
     displayDBProduct(res.data[0]);
   } catch (err) {
+    var localProduct = getLocalProductById(productId);
+    if (localProduct) {
+      displayDBProduct(localProduct);
+      return;
+    }
     console.error('[DB] JS error:', err);
     document.getElementById('prodName').textContent =
       lang === 'ar' ? 'خطأ في الاتصال' : 'Erreur de connexion';

@@ -898,6 +898,105 @@ adjustNav();
   if (!GRID) return;
 
   var dbCache = {}; // id → product
+  var LOCAL_PRODUCTS_KEY = 'merchant_products';
+
+  function getLocalProducts() {
+    try {
+      var raw = localStorage.getItem(LOCAL_PRODUCTS_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function renderProductsList(products) {
+    if (!products || !products.length) return;
+
+    products.forEach(function (p) { dbCache[String(p.id)] = p; });
+
+    var badges = ['🆕 جديد', '⭐ مميز', '🔥 رائج', '✨ حصري'];
+
+    var html = products.map(function (p, i) {
+      var safeId = String(p.id).replace(/['"\\]/g, '');
+      var gId    = 'db-g-' + safeId;
+      var waMsg  = 'السلام عليكم، بغيت نشري ' + p.name + ' — الثمن: ' + p.price + ' درهم';
+      var waUrl  = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(waMsg);
+      var sub    = p.description
+        ? (p.description.length > 72 ? p.description.slice(0, 72) + '...' : p.description)
+        : (p.color ? 'اللون: ' + p.color + (p.size ? ' | ' + p.size : '') : 'منتج جديد من متجرنا');
+
+      var imgSrcs = [p.image_url, p.image_url2, p.image_url3, p.image_url4].filter(Boolean);
+      var imgsHtml = '';
+      if (imgSrcs.length) {
+        imgSrcs.forEach(function (src, j) {
+          imgsHtml += '<img src="' + h(src) + '"' +
+            (j === 0 ? ' class="active"' : '') +
+            ' alt="' + h(p.name) + '" loading="lazy"' +
+            ' onerror="this.style.display=\'none\'">';
+        });
+      } else {
+        imgsHtml = '<div class="g-ph"><i class="fa-solid fa-layer-group"></i>' +
+          '<span>' + h(p.name) + '</span></div>';
+      }
+
+      return (
+        '<div class="prod-card">' +
+          '<div class="gallery" id="' + gId + '">' +
+            imgsHtml +
+            '<button class="g-arr g-arr-r" onclick="slideG(\'' + gId + '\',-1)">&#8249;</button>' +
+            '<button class="g-arr g-arr-l" onclick="slideG(\'' + gId + '\', 1)">&#8250;</button>' +
+            '<div class="g-dots" id="dots-' + gId + '"></div>' +
+            '<div class="g-badge">' + badges[i % badges.length] + '</div>' +
+            '<div class="g-ship">🚚 فابور</div>' +
+          '</div>' +
+          '<div class="card-body">' +
+            '<div class="card-name">' + h(p.name) + '</div>' +
+            '<div class="card-sub">' + h(sub) + '</div>' +
+            '<div class="price-row">' +
+              '<div class="price">' + Number(p.price).toLocaleString('ar') +
+                ' <small>درهم</small></div>' +
+              '<div class="stars-wrap"><span class="stars">★★★★★</span>' +
+                '<span class="stars-val">5.0</span></div>' +
+            '</div>' +
+            '<button class="prod-order-btn" onclick="openOrderModal(\'' + escJ(p.name) + '\',\'' + escJ(String(p.price)) + '\')">' +
+              '<span>اطلب الآن</span>' +
+            '</button>' +
+            '<a href="product.html?id=' + safeId + '&src=db" class="details-btn">' +
+              '<i class="fa-solid fa-magnifying-glass"></i>' +
+              '<span>عرض تفاصيل المنتج</span>' +
+            '</a>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    GRID.insertAdjacentHTML('afterbegin', html);
+
+    products.forEach(function (p) {
+      var safeId = String(p.id).replace(/['"\\]/g, '');
+      var gId    = 'db-g-' + safeId;
+      var gallEl = document.getElementById(gId);
+      if (!gallEl) return;
+
+      var imgCount = gallEl.querySelectorAll('img').length;
+
+      if (imgCount >= 1) {
+        buildGallery(gId);
+      }
+      if (imgCount <= 1) {
+        gallEl.querySelectorAll('.g-arr').forEach(function (a) {
+          a.style.display = 'none';
+        });
+      }
+    });
+  }
+
+  function renderLocalFallback() {
+    var localProducts = getLocalProducts();
+    if (localProducts.length) {
+      renderProductsList(localProducts);
+    }
+  }
 
   /* ── Skeleton placeholders ── */
   var skelWrap = document.createElement('div');
@@ -921,87 +1020,17 @@ adjustNav();
     .then(function (res) {
       var sk = document.getElementById('dbSkelWrap');
       if (sk) sk.remove();
-      if (res.error || !res.data || !res.data.length) return;
-
-      res.data.forEach(function (p) { dbCache[String(p.id)] = p; });
-
-      var badges = ['🆕 جديد', '⭐ مميز', '🔥 رائج', '✨ حصري'];
-
-      var html = res.data.map(function (p, i) {
-        var safeId = String(p.id).replace(/['"\\]/g, '');
-        var gId    = 'db-g-' + safeId;
-        var waMsg  = 'السلام عليكم، بغيت نشري ' + p.name + ' — الثمن: ' + p.price + ' درهم';
-        var waUrl  = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(waMsg);
-        var sub    = p.description
-          ? (p.description.length > 72 ? p.description.slice(0, 72) + '...' : p.description)
-          : (p.color ? 'اللون: ' + p.color + (p.size ? ' | ' + p.size : '') : 'منتج جديد من متجرنا');
-
-        /* ── بناء الصور (فقط اللي مشي فارغة) ── */
-        var imgSrcs = [p.image_url, p.image_url2, p.image_url3, p.image_url4].filter(Boolean);
-        var imgsHtml = '';
-        if (imgSrcs.length) {
-          imgSrcs.forEach(function (src, j) {
-            imgsHtml += '<img src="' + h(src) + '"' +
-              (j === 0 ? ' class="active"' : '') +
-              ' alt="' + h(p.name) + '" loading="lazy"' +
-              ' onerror="this.style.display=\'none\'">';
-          });
-        } else {
-          imgsHtml = '<div class="g-ph"><i class="fa-solid fa-layer-group"></i>' +
-            '<span>' + h(p.name) + '</span></div>';
-        }
-
-        return (
-          '<div class="prod-card">' +
-            '<div class="gallery" id="' + gId + '">' +
-              imgsHtml +
-              '<button class="g-arr g-arr-r" onclick="slideG(\'' + gId + '\',-1)">&#8249;</button>' +
-              '<button class="g-arr g-arr-l" onclick="slideG(\'' + gId + '\', 1)">&#8250;</button>' +
-              '<div class="g-dots" id="dots-' + gId + '"></div>' +
-              '<div class="g-badge">' + badges[i % badges.length] + '</div>' +
-              '<div class="g-ship">🚚 فابور</div>' +
-            '</div>' +
-            '<div class="card-body">' +
-              '<div class="card-name">' + h(p.name) + '</div>' +
-              '<div class="card-sub">' + h(sub) + '</div>' +
-              '<div class="price-row">' +
-                '<div class="price">' + Number(p.price).toLocaleString('ar') +
-                  ' <small>درهم</small></div>' +
-                '<div class="stars-wrap"><span class="stars">★★★★★</span>' +
-                  '<span class="stars-val">5.0</span></div>' +
-              '</div>' +
-              '<button class="prod-order-btn" onclick="openOrderModal(\'' + escJ(p.name) + '\',\'' + escJ(String(p.price)) + '\')">' +
-                '<span>اطلب الآن</span>' +
-              '</button>' +
-              '<a href="product.html?id=' + safeId + '&src=db" class="details-btn">' +
-                '<i class="fa-solid fa-magnifying-glass"></i>' +
-                '<span>عرض تفاصيل المنتج</span>' +
-              '</a>' +
-            '</div>' +
-          '</div>'
-        );
-      }).join('');
-
-      GRID.insertAdjacentHTML('afterbegin', html);
-
-      /* ── تهيئة الـ gallery لكل منتج بعد الإدراج في DOM ── */
-      res.data.forEach(function (p) {
-        var safeId = String(p.id).replace(/['"\\]/g, '');
-        var gId    = 'db-g-' + safeId;
-        var gallEl = document.getElementById(gId);
-        if (!gallEl) return;
-
-        var imgCount = gallEl.querySelectorAll('img').length;
-
-        if (imgCount >= 1) {
-          buildGallery(gId);                           /* dots + swipe */
-        }
-        if (imgCount <= 1) {
-          gallEl.querySelectorAll('.g-arr').forEach(function (a) {
-            a.style.display = 'none';                  /* أخبي الأسهم لصورة واحدة */
-          });
-        }
-      });
+      if (res.error || !res.data || !res.data.length) {
+        renderLocalFallback();
+        return;
+      }
+      renderProductsList(res.data);
+    })
+    .catch(function (err) {
+      console.warn('Falling back to local products', err);
+      var sk = document.getElementById('dbSkelWrap');
+      if (sk) sk.remove();
+      renderLocalFallback();
     });
 
   /* ══════════════════════════════════════════

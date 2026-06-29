@@ -326,9 +326,19 @@ html[dir="rtl"] .gate-inp{padding:12px 46px 12px 16px}
    PASSWORD GATE
 ══════════════════════════════════════════ */
 var GATE_PASS = '123456';
+var LEGACY_GATES = ['2026', '123456'];
+
+function getMerchantAuth() {
+  return localStorage.getItem('merchant_auth') || sessionStorage.getItem('merchant_auth') || '0';
+}
+
+function setMerchantAuth(val) {
+  sessionStorage.setItem('merchant_auth', val);
+  localStorage.setItem('merchant_auth', val);
+}
 
 (function() {
-  if (sessionStorage.getItem('merchant_auth') === '1') {
+  if (getMerchantAuth() === '1') {
     document.getElementById('gateOverlay').classList.add('gone');
   } else {
     setTimeout(function(){
@@ -341,8 +351,8 @@ var GATE_PASS = '123456';
 function checkGate() {
   var val    = document.getElementById('gateInp').value;
   var errDiv = document.getElementById('gateErr');
-  if (val === GATE_PASS) {
-    sessionStorage.setItem('merchant_auth', '1');
+  if (LEGACY_GATES.indexOf(val) !== -1) {
+    setMerchantAuth('1');
     var overlay = document.getElementById('gateOverlay');
     overlay.style.opacity = '0';
     overlay.style.transition = 'opacity .4s ease';
